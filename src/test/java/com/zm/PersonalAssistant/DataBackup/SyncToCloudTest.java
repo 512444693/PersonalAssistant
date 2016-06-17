@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by zhangmin on 2016/6/16.
@@ -138,6 +136,30 @@ public class SyncToCloudTest {
         verify(mockDropBox, times(4)).uploadFile(anyString());
     }
 
-    //TODO : upload()，字符串为空
-    //TODO : upload(), 字符串为 "." || ".." || 绝对路径
+    @Test
+    public void no_file_upload_when_file_path_is_not_exists(){
+        //Arrange
+        CloudPlatform mockDropBox = mock(DropBox.class);
+        SyncToCloud syncToCloud = new SyncToCloud(mockDropBox);
+
+        //Act
+        syncToCloud.upload("");
+        syncToCloud.upload("notFile");
+
+        //Assert
+        verify(mockDropBox, never()).uploadFile(anyString());
+    }
+
+    @Test
+    public void still_work_when_file_path_is_special(){
+        //Arrange
+        CloudPlatform mockDropBox = mock(DropBox.class);
+        SyncToCloud syncToCloud = new SyncToCloud(mockDropBox);
+
+        //Act
+        syncToCloud.uploadExcept(".", "logs");
+
+        //Assert
+        verify(mockDropBox, never()).uploadFile(contains("info.log"));
+    }
 }

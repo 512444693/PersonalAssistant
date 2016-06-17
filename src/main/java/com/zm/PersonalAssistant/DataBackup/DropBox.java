@@ -5,6 +5,7 @@ import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.DbxPathV2;
 import com.dropbox.core.v2.files.*;
+import com.zm.PersonalAssistant.utils.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -23,6 +24,8 @@ public class DropBox extends CloudPlatform {
 
     private static final long CHUNKED_UPLOAD_CHUNK_SIZE = 8L << 20; // 8MiB
     private static final int CHUNKED_UPLOAD_MAX_ATTEMPTS = 5;
+    private static final String CURRENT_OR_PARENT_DIRECTORY_REGEX_LINUX = "[./|../]+";
+    private static final String CURRENT_OR_PARENT_DIRECTORY_REGEX_WIN = "[.\\\\|..\\\\]+";
 
     public DropBox(String authFile){
         DbxAuthInfo authInfo = null;
@@ -40,7 +43,9 @@ public class DropBox extends CloudPlatform {
     @Override
     public void uploadFile(String localFilePath) {
         File localFile = new File(localFilePath);
-        String remotePath = "/" + localFilePath;
+
+        //将文件最外层目录当作DropBox的基目录
+        String remotePath ="/" + StringUtils.removeStart(StringUtils.removeStart(localFilePath, CURRENT_OR_PARENT_DIRECTORY_REGEX_WIN), CURRENT_OR_PARENT_DIRECTORY_REGEX_LINUX);
 
         String pathError = DbxPathV2.findError(remotePath);
         if (pathError != null) {

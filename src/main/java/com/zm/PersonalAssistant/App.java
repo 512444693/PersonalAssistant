@@ -3,7 +3,6 @@ package com.zm.PersonalAssistant;
 import com.zm.PersonalAssistant.DataBackup.DropBox;
 import com.zm.PersonalAssistant.DataBackup.SyncToCloud;
 
-import static org.mockito.Mockito.mock;
 
 /**
  * Hello world!
@@ -13,9 +12,12 @@ public class App
 {
     public static void main( String[] args )
     {
+        if(args.length != 2){
+            throw new IllegalStateException("<file-ready-to-upload> <except-file>");
+        }
         DropBox dropBox = new DropBox("DropBox.auth");
-        //DropBox dropBox = mock(DropBox.class);
         SyncToCloud syncToCloud = new SyncToCloud(dropBox);
-        syncToCloud.upload(args[0]);
+        syncToCloud.uploadExcept(args[0], args[1]);
+
     }
 }
