@@ -1,7 +1,6 @@
-package com.zm.PersonalAssistant.DataBackup;
+package com.zm.PersonalAssistant.DataPersistence;
 
 import org.junit.*;
-import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,9 +156,9 @@ public class SyncToCloudTest {
         SyncToCloud syncToCloud = new SyncToCloud(mockDropBox);
 
         //Act
-        syncToCloud.uploadExcept(".", "logs");
+        syncToCloud.uploadExcept(".", "../PersonalAssistant/src/test");
 
         //Assert
-        verify(mockDropBox, never()).uploadFile(contains("info.log"));
+        verify(mockDropBox, never()).uploadFile(contains("SynToCloudTest.java"));
     }
 }

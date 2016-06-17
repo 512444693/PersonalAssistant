@@ -1,7 +1,7 @@
 package com.zm.PersonalAssistant;
 
-import com.zm.PersonalAssistant.DataBackup.DropBox;
-import com.zm.PersonalAssistant.DataBackup.SyncToCloud;
+import com.zm.PersonalAssistant.DataPersistence.DropBox;
+import com.zm.PersonalAssistant.DataPersistence.SyncToCloud;
 
 
 /**
