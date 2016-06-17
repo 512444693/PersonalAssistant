@@ -83,8 +83,8 @@ public class SyncToCloudTest {
         syncToCloud.upload(FILE_READY_FOR_UPLOAD);
 
         //Assert
-        verify(mockDropBox, times(1)).uploadFile(FILE_READY_FOR_UPLOAD, "/" + FILE_READY_FOR_UPLOAD);
-        verify(mockDropBox, times(1)).uploadFile(anyString(), anyString());
+        verify(mockDropBox, times(1)).uploadFile(FILE_READY_FOR_UPLOAD);
+        verify(mockDropBox, times(1)).uploadFile(anyString());
     }
 
     @Test
@@ -97,17 +97,12 @@ public class SyncToCloudTest {
         syncToCloud.upload(DIRECTORY_LEVEL_1_NO_1);
 
         //Assert
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_1, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_1);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2);
-        verify(mockDropBox, times(5)).uploadFile(anyString(), anyString());
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_1);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2);
+        verify(mockDropBox, times(5)).uploadFile(anyString());
     }
 
     @Test
@@ -120,13 +115,10 @@ public class SyncToCloudTest {
         syncToCloud.uploadExcept(DIRECTORY_LEVEL_1_NO_1, DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1);
 
         //Assert
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
-        verify(mockDropBox, times(3)).uploadFile(anyString(), anyString());
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
+        verify(mockDropBox, times(3)).uploadFile(anyString());
     }
 
     @Test
@@ -139,15 +131,11 @@ public class SyncToCloudTest {
         syncToCloud.uploadExcept(DIRECTORY_LEVEL_1_NO_1, DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_1);
 
         //Assert
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
-        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2, "/" +
-                DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2);
-        verify(mockDropBox, times(4)).uploadFile(anyString(), anyString());
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_1);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_2);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + FILE_IN_DIRECTORY11_NO_3);
+        verify(mockDropBox, times(1)).uploadFile(DIRECTORY_LEVEL_1_NO_1 + File.separator + DIRECTORY_LEVEL_2_NO_1 + File.separator + FILE_IN_DIRECTORY21_NO_2);
+        verify(mockDropBox, times(4)).uploadFile(anyString());
     }
 
     //TODO : upload()，字符串为空

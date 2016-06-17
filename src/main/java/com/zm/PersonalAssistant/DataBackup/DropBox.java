@@ -38,8 +38,9 @@ public class DropBox extends CloudPlatform {
     }
 
     @Override
-    public void uploadFile(String localFilePath, String remotePath) {
+    public void uploadFile(String localFilePath) {
         File localFile = new File(localFilePath);
+        String remotePath = "/" + localFilePath;
 
         String pathError = DbxPathV2.findError(remotePath);
         if (pathError != null) {

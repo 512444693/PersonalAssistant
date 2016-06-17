@@ -5,5 +5,5 @@ package com.zm.PersonalAssistant.DataBackup;
  */
 public abstract class CloudPlatform {
 
-    public abstract void uploadFile(String localFilePath, String remotePath);
+    public abstract void uploadFile(String localFilePath);
 }
