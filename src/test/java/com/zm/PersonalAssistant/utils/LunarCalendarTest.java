@@ -127,13 +127,9 @@ public class LunarCalendarTest {
 
     @Test
     public void testToString(){
-        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        LunarCalendar lc = new LunarCalendar(1991, 11, 16);
         assertTrue(lc.toString() != null);
         assertTrue(!lc.toString().equals(""));
         System.out.println(lc.toString());
-        for(int i = 0; i < 30; i++){
-            lc.addDate(30);
-            System.out.println(lc.toString());
-        }
     }
 }

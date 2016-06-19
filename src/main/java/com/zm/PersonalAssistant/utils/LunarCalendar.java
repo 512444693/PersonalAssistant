@@ -18,7 +18,7 @@ public class LunarCalendar {
         this(true, chineseYear, chineseMonth, chineseDate);
     }
 
-    protected LunarCalendar(boolean isChinese, int year, int month, int date){
+    protected LunarCalendar(boolean isChinese, int year, int month, int date) {
         if(!isChinese){
             chineseCalendar = new ChineseCalendar(false, year, month - 1, date);
         }else {
