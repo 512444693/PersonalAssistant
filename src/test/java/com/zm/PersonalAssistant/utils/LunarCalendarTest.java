@@ -1,9 +1,9 @@
 package com.zm.PersonalAssistant.utils;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
-import java.util.GregorianCalendar;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -83,7 +83,6 @@ public class LunarCalendarTest {
         verifyLunarCalendar(lc, LUNAR_END_OF_YEAR);
     }
 
-    //TODO ：闰月, ｛没有闰月，有闰月｛第一个月，第二个月｝｝
     @Test
     public void testLeapMonth(){
         //Arrange
@@ -126,10 +125,175 @@ public class LunarCalendarTest {
     }
 
     @Test
-    public void testToString(){
+    public void testToString() {
         LunarCalendar lc = new LunarCalendar(1991, 11, 16);
         assertTrue(lc.toString() != null);
         assertTrue(!lc.toString().equals(""));
-        System.out.println(lc.toString());
+    }
+
+    @Test
+    public void testHasHourMinuteConstructor(){
+        //Arrange,Act
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 0, 0);
+        LunarCalendar lc2 = new LunarCalendar(true, NORMAL[0], NORMAL[1], NORMAL[2], 23, 59);
+        LunarCalendar lc3 = new LunarCalendar(false, NORMAL[3], NORMAL[4], NORMAL[5], 11, 21);
+        LunarCalendar lc4 = new LunarCalendar();
+
+        //Assert
+        verifyLunarCalendar(lc, NORMAL);
+        verifyLunarCalendar(lc2, NORMAL);
+        System.out.println(lc4);
+        verifyLunarCalendar(lc3, NORMAL);
+        assertEquals(0, lc.getHour());
+        assertEquals(0, lc.getMinute());
+        assertEquals(23, lc2.getHour());
+        assertEquals(59, lc2.getMinute());
+        assertEquals(11, lc3.getHour());
+        assertEquals(21, lc3.getMinute());
+        assertTrue(lc.getHour() <= 23);
+        assertTrue(lc.getHour() >= 0);
+        assertTrue(lc.getMinute() <= 59);
+        assertTrue(lc.getHour() >= 0);
+    }
+
+    @Test
+    public void testAddHour(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 0, 0);
+        LunarCalendar lc2 = new LunarCalendar(false, NORMAL[3], NORMAL[4], NORMAL[5], 11, 21);
+
+        //Act
+        lc.addHour(13);
+        lc2.addHour(15);
+
+        //Assert
+        assertEquals(13, lc.getHour());
+        assertEquals(0, lc.getMinute());
+        verifyLunarCalendar(lc, NORMAL);
+
+        assertEquals(2, lc2.getHour());
+        assertEquals(21, lc2.getMinute());
+        verifyLunarCalendar(lc2, new int[]{NORMAL[0], NORMAL[1], NORMAL[2] + 1, NORMAL[3], NORMAL[4], NORMAL[5] + 1});
+    }
+
+    @Test
+    public void testAddMinute(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 0, 0);
+        LunarCalendar lc2 = new LunarCalendar(false, NORMAL[3], NORMAL[4], NORMAL[5], 23, 59);
+
+        //Act
+        lc.addMinute(13);
+        lc2.addMinute(15);
+
+        //Assert
+        assertEquals(0, lc.getHour());
+        assertEquals(13, lc.getMinute());
+        verifyLunarCalendar(lc, NORMAL);
+
+        assertEquals(0, lc2.getHour());
+        assertEquals(14, lc2.getMinute());
+        verifyLunarCalendar(lc2, new int[]{NORMAL[0], NORMAL[1], NORMAL[2] + 1, NORMAL[3], NORMAL[4], NORMAL[5] + 1});
+    }
+
+    @Test
+    public void testAddWeek(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        LunarCalendar lc2 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+
+        //Act
+        lc.addWeek(2);
+        lc2.addWeek(-2);
+
+        //Assert
+        verifyLunarCalendar(lc, new int[]{NORMAL[0], 4, 13, NORMAL[3], NORMAL[4], 19});
+        verifyLunarCalendar(lc2, new int[]{NORMAL[0], 3, 15, NORMAL[3], 4, 21});
+    }
+
+    @Test
+    public void testAddChineseMonth(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        LunarCalendar lc2 = new LunarCalendar(NEXT_MONTH_IS_LEAP[0], NEXT_MONTH_IS_LEAP[1], NEXT_MONTH_IS_LEAP[2]);
+
+        //Act
+        lc.addChineseMonth(12);
+        lc2.addChineseMonth(1);
+
+        //Assert
+        verifyLunarCalendar(lc, new int[]{NORMAL[0] + 1, NORMAL[1], NORMAL[2], NORMAL[3] + 1, 4, 25});
+        verifyLunarCalendar(lc2, LEAP_MONTH);
+    }
+
+    @Test
+    public void testAddMonth(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+
+        //Act
+        lc.addMonth(-1);
+
+        //Assert
+        verifyLunarCalendar(lc, new int[]{NORMAL[0], 2, 28, NORMAL[3], NORMAL[4] - 1, NORMAL[5]});
+    }
+
+    @Test
+    public void testAddChineseYear(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+
+        //Act
+        lc.addChineseYear(-1);
+
+        //Assert
+        verifyLunarCalendar(lc, new int[]{NORMAL[0] - 1, NORMAL[1], NORMAL[2], 2015, 5, 17});
+    }
+
+    @Test
+    public void testAddYear(){
+        //Arrange
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+
+        //Act
+        lc.addYear(2);
+
+        //Assert
+        verifyLunarCalendar(lc, new int[]{2018 ,3 ,20, NORMAL[3] + 2, NORMAL[4], NORMAL[5]});
+    }
+
+    @Test
+    public void testCompareTo(){
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 0 , 0);
+        LunarCalendar lc2 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        LunarCalendar lc3 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        lc3.addMinute(1);
+        LunarCalendar lc4 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
+        lc4.addMinute(-1);
+
+        assertEquals(0, lc.compareTo(lc2));
+        assertEquals(-1, lc.compareTo(lc3));
+        assertEquals(1, lc.compareTo(lc4));
+        lc3.addMinute(-1);lc4.addMinute(1);
+
+        lc3.addChineseYear(1);lc4.addChineseYear(-1);
+        assertEquals(-1, lc.compareTo(lc3));
+        assertEquals(1, lc.compareTo(lc4));
+        lc3.addChineseYear(-1);lc4.addChineseYear(-1);
+
+        lc3.addChineseMonth(1);lc4.addChineseMonth(-1);
+        assertEquals(-1, lc.compareTo(lc3));
+        assertEquals(1, lc.compareTo(lc4));
+        lc3.addChineseMonth(-1);lc4.addChineseMonth(-1);
+
+        lc3.addDate(1);lc4.addDate(-1);
+        assertEquals(-1, lc.compareTo(lc3));
+        assertEquals(1, lc.compareTo(lc4));
+        lc3.addDate(-1);lc4.addDate(-1);
+
+        lc3.addHour(1);lc4.addHour(-1);
+        assertEquals(-1, lc.compareTo(lc3));
+        assertEquals(1, lc.compareTo(lc4));
+        lc3.addHour(-1);lc4.addHour(-1);
     }
 }

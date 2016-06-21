@@ -6,24 +6,37 @@ import java.util.GregorianCalendar;
 
 /**
  * Created by zhangmin on 2016/6/18.
+ * 粒度为分钟
  */
-public class LunarCalendar {
+public class LunarCalendar implements Comparable<LunarCalendar> {
     private ChineseCalendar chineseCalendar;
 
     public LunarCalendar(){
         chineseCalendar = new ChineseCalendar();
     }
 
-    protected LunarCalendar(int chineseYear, int chineseMonth, int chineseDate) {
+    public LunarCalendar(int chineseYear, int chineseMonth, int chineseDate) {
         this(true, chineseYear, chineseMonth, chineseDate);
     }
 
-    protected LunarCalendar(boolean isChinese, int year, int month, int date) {
+    public LunarCalendar(boolean isChinese, int year, int month, int date) {
+        this(isChinese, year, month, date, 0, 0);
+    }
+
+    public LunarCalendar(int year, int month, int date, int hour, int minute) {
+        this(true, year, month, date, hour, minute);
+    }
+
+    public LunarCalendar(boolean isChinese, int year, int month, int date, int hour, int minute) {
         if(!isChinese){
             chineseCalendar = new ChineseCalendar(false, year, month - 1, date);
         }else {
             chineseCalendar = new ChineseCalendar(true, year, month, date);
         }
+        chineseCalendar.set(ChineseCalendar.HOUR_OF_DAY, hour);
+        chineseCalendar.set(ChineseCalendar.MINUTE, minute);
+        chineseCalendar.set(ChineseCalendar.SECOND, 0);
+        chineseCalendar.set(ChineseCalendar.MILLISECOND, 0);
     }
 
     public int getYear() {
@@ -71,7 +84,53 @@ public class LunarCalendar {
 
     @Override
     public String toString(){
-        return chineseCalendar.toString();
+        return chineseCalendar.toString() + " " + this.getHour() + "时" + this.getMinute() + "分";
+    }
+
+    public int getHour() {
+        return chineseCalendar.get(ChineseCalendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute() {
+        return chineseCalendar.get(ChineseCalendar.MINUTE);
+    }
+
+    public void addHour(int hour) {
+        chineseCalendar.add(ChineseCalendar.HOUR_OF_DAY, hour);
+    }
+
+    public void addMinute(int minute) {
+        chineseCalendar.add(ChineseCalendar.MINUTE, minute);
+    }
+
+    public void addWeek(int week) {
+        this.addDate(7 * week);
+    }
+
+    public void addChineseMonth(int chineseMonth) {
+        chineseCalendar.add(ChineseCalendar.CHINESE_MONTH, chineseMonth);
+    }
+
+    public void addMonth(int month) {
+        chineseCalendar.add(ChineseCalendar.MONTH, month);
+    }
+
+    public void addChineseYear(int chineseYear){
+        chineseCalendar.add(ChineseCalendar.CHINESE_YEAR, chineseYear);
+    }
+
+    public void addYear(int year){
+        chineseCalendar.add(ChineseCalendar.YEAR, year);
+    }
+
+    @Override
+    public int compareTo(LunarCalendar o) {
+        return (this.getYear() > o.getYear()) ? 1 : (this.getMonth() < o.getMonth()) ? -1
+                : (this.getMonth() < o.getMonth()) ? 1 : (this.getMonth() < o.getMonth()) ? -1
+                : (this.getDate() > o.getDate()) ? 1 : (this.getDate() < o.getDate()) ? -1
+                : (this.getHour() > o.getHour()) ? 1 : (this.getHour() < o.getHour()) ? -1
+                : (this.getMinute() > o.getMinute()) ? 1 : (this.getMinute() < o.getMinute()) ? -1
+                : 0;
     }
 }
 /**
