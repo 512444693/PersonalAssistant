@@ -22,7 +22,16 @@ public class Reminder {
         this.repeat = repeat;
         this.info = info;
         advancedNotifyList = AdvancedNotify.createList(advancedNotifyStr);
+        verifyRepeatAndAdvancedUnitMatch();
         creationTime = new Date();
+    }
+
+    private void verifyRepeatAndAdvancedUnitMatch() {
+        for(AdvancedNotify aNotify : advancedNotifyList){
+            if(repeat.ordinal() < aNotify.unit.ordinal()){
+                throw new IllegalArgumentException("Repeat is " + repeat + " and advanced unit is " + aNotify.unit);
+            }
+        }
     }
 
     public boolean isLunar() {

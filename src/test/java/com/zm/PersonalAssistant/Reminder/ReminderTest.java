@@ -13,7 +13,7 @@ public class ReminderTest {
     public void testConstructor(){
         //Arrange Act
         LunarCalendar timeBirthday = new LunarCalendar(1991, 11, 16);
-        Reminder reminder = new Reminder(true, timeBirthday, Repeat.YEAR, "张三的生日", "2/day 1/hour");
+        Reminder reminder = new Reminder(true, timeBirthday, Repeat.YEAR, "张三的生日", "2/day;4/day");
 
         //Assert
         assertEquals(true, reminder.isLunar());
@@ -22,6 +22,14 @@ public class ReminderTest {
         assertEquals("张三的生日", reminder.getInfo());
         assertEquals(2, reminder.getAdvancedNotifyList().size());
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalArg(){
+        LunarCalendar timeBirthday = new LunarCalendar(1991, 11, 16);
+        new Reminder(true, timeBirthday, Repeat.DAY, "张三的生日", "2/month;4/day");
+    }
+
+
 }
 
 //TODO : 提前通知测试，单个提前，多个一起提前等
