@@ -13,6 +13,7 @@ public class LunarCalendar implements Comparable<LunarCalendar> {
 
     public LunarCalendar(){
         chineseCalendar = new ChineseCalendar();
+        //setSecondAndMillisecondZero();
     }
 
     public LunarCalendar(int chineseYear, int chineseMonth, int chineseDate) {
@@ -35,6 +36,10 @@ public class LunarCalendar implements Comparable<LunarCalendar> {
         }
         chineseCalendar.set(ChineseCalendar.HOUR_OF_DAY, hour);
         chineseCalendar.set(ChineseCalendar.MINUTE, minute);
+        setSecondAndMillisecondZero();
+    }
+
+    private void setSecondAndMillisecondZero(){
         chineseCalendar.set(ChineseCalendar.SECOND, 0);
         chineseCalendar.set(ChineseCalendar.MILLISECOND, 0);
     }
@@ -108,6 +113,8 @@ public class LunarCalendar implements Comparable<LunarCalendar> {
     }
 
     public void addChineseMonth(int chineseMonth) {
+        if(chineseMonth < 0)
+            throw new IllegalArgumentException("暂不支持农历增加负数月");
         chineseCalendar.add(ChineseCalendar.CHINESE_MONTH, chineseMonth);
     }
 
@@ -125,12 +132,26 @@ public class LunarCalendar implements Comparable<LunarCalendar> {
 
     @Override
     public int compareTo(LunarCalendar o) {
-        return (this.getYear() > o.getYear()) ? 1 : (this.getMonth() < o.getMonth()) ? -1
-                : (this.getMonth() < o.getMonth()) ? 1 : (this.getMonth() < o.getMonth()) ? -1
+        return (this.getYear() > o.getYear()) ? 1 : (this.getYear() < o.getYear()) ? -1
+                : (this.getMonth() > o.getMonth()) ? 1 : (this.getMonth() < o.getMonth()) ? -1
                 : (this.getDate() > o.getDate()) ? 1 : (this.getDate() < o.getDate()) ? -1
                 : (this.getHour() > o.getHour()) ? 1 : (this.getHour() < o.getHour()) ? -1
                 : (this.getMinute() > o.getMinute()) ? 1 : (this.getMinute() < o.getMinute()) ? -1
                 : 0;
+    }
+
+    public int lunarCompareTo(LunarCalendar o) {
+        return (this.getChineseYear() > o.getChineseYear()) ? 1 : (this.getChineseYear() < o.getChineseYear()) ? -1
+                : (this.getChineseMonth() > o.getChineseMonth()) ? 1 : (this.getChineseMonth() < o.getChineseMonth()) ? -1
+                : (this.getChineseDate() > o.getChineseDate()) ? 1 : (this.getChineseDate() < o.getChineseDate()) ? -1
+                : (this.getHour() > o.getHour()) ? 1 : (this.getHour() < o.getHour()) ? -1
+                : (this.getMinute() > o.getMinute()) ? 1 : (this.getMinute() < o.getMinute()) ? -1
+                : 0;
+    }
+
+    public LunarCalendar clone(){
+        return new LunarCalendar(false, this.getYear(), this.getMonth(), this.getDate(),
+                this.getHour(), this.getMinute());
     }
 }
 /**

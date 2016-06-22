@@ -216,14 +216,17 @@ public class LunarCalendarTest {
         //Arrange
         LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
         LunarCalendar lc2 = new LunarCalendar(NEXT_MONTH_IS_LEAP[0], NEXT_MONTH_IS_LEAP[1], NEXT_MONTH_IS_LEAP[2]);
+        //LunarCalendar lc3 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
 
         //Act
         lc.addChineseMonth(12);
         lc2.addChineseMonth(1);
+        //lc3.addChineseMonth(-1);
 
         //Assert
         verifyLunarCalendar(lc, new int[]{NORMAL[0] + 1, NORMAL[1], NORMAL[2], NORMAL[3] + 1, 4, 25});
         verifyLunarCalendar(lc2, LEAP_MONTH);
+        //verifyLunarCalendar(lc3, new int[]{NORMAL[0] , NORMAL[1] - 1, NORMAL[2], NORMAL[3], 4 , 6});
     }
 
     @Test
@@ -263,7 +266,7 @@ public class LunarCalendarTest {
     }
 
     @Test
-    public void testCompareTo(){
+    public void testCompareTo(){//测试不合格，需要将每个路径测试一遍
         LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 0 , 0);
         LunarCalendar lc2 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
         LunarCalendar lc3 = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2]);
@@ -281,11 +284,6 @@ public class LunarCalendarTest {
         assertEquals(1, lc.compareTo(lc4));
         lc3.addChineseYear(-1);lc4.addChineseYear(-1);
 
-        lc3.addChineseMonth(1);lc4.addChineseMonth(-1);
-        assertEquals(-1, lc.compareTo(lc3));
-        assertEquals(1, lc.compareTo(lc4));
-        lc3.addChineseMonth(-1);lc4.addChineseMonth(-1);
-
         lc3.addDate(1);lc4.addDate(-1);
         assertEquals(-1, lc.compareTo(lc3));
         assertEquals(1, lc.compareTo(lc4));
@@ -295,5 +293,14 @@ public class LunarCalendarTest {
         assertEquals(-1, lc.compareTo(lc3));
         assertEquals(1, lc.compareTo(lc4));
         lc3.addHour(-1);lc4.addHour(-1);
+    }
+
+    @Test
+    public void testClone(){
+        LunarCalendar lc = new LunarCalendar(NORMAL[0], NORMAL[1], NORMAL[2], 18, 30);
+        LunarCalendar clone = lc.clone();
+
+        assertEquals(0, lc.compareTo(clone));
+        verifyLunarCalendar(clone, NORMAL);
     }
 }

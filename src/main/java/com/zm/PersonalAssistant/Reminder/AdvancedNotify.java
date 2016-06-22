@@ -9,8 +9,8 @@ import static com.zm.PersonalAssistant.Reminder.AdvancedUnit.*;
  * Created by zhangmin on 2016/6/21.
  */
 public class AdvancedNotify {
-    public int num;
-    public AdvancedUnit unit;
+    public final int num;
+    public final AdvancedUnit unit;
     public boolean alreadyNotify;
 
     protected AdvancedNotify(int num, AdvancedUnit unit){
