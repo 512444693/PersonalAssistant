@@ -17,12 +17,16 @@ public class Reminder implements Comparable<Reminder> {
     private final Date creationTime;
     private boolean deletable;
 
+    //编号
+    private final int number;
+    private static int seq = 1000;
+
     //程序内部使用
     private LunarCalendar tempSaveForNextMonthIsLeap;
 
     private static final String notifyFormat = "【%s】\r\n事件:【%s】\r\n时间:【%s】\r\n附加:【%s】";
     private static final String[] notifyLeapMonthInfo = {"无", "下月是闰月", "本月是闰月"};
-    private static final String toStringFormat = "【按照%s】 【时间：%s】 【重复：%s】 【提前：%s通知】 【信息：%s】";
+    private static final String toStringFormat = "【编号：%s】 【按照：%s】 【时间：%s】 【重复：%s】 【提前：%s通知】 【信息：%s】 【添加时间：%s】 【是否失效：%s】";
 
     public Reminder(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
         this.lunar = lunar;
@@ -34,6 +38,7 @@ public class Reminder implements Comparable<Reminder> {
         creationTime = new Date();
         deletable = false;
         tempSaveForNextMonthIsLeap = null;
+        number = ++seq;
     }
 
     private void verifyRepeatAndAdvancedUnitMatch() {
@@ -165,8 +170,9 @@ public class Reminder implements Comparable<Reminder> {
 
     @Override
     public String toString(){
-        return String.format(toStringFormat, isLunar() ? "农历" : "阳历",
-                remindTime.toString(), repeat.getDescribe(), getAdvancedNotifyStr(), info);
+        return String.format(toStringFormat, getNumber(), isLunar() ? "农历" : "阳历", remindTime.toString(),
+                repeat.getDescribe(), getAdvancedNotifyStr(), info,
+                creationTime.toString(), isDeletable() ? "是" : "否");
     }
 
     private String getAdvancedNotifyStr(){
@@ -175,5 +181,9 @@ public class Reminder implements Comparable<Reminder> {
             ret.append(aNotify.num).append(aNotify.unit.getDescribe()).append(" ");
         }
         return ret.toString();
+    }
+
+    public long getNumber() {
+        return number;
     }
 }
