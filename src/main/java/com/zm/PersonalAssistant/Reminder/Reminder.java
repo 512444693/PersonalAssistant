@@ -38,7 +38,11 @@ public class Reminder implements Comparable<Reminder> {
         creationTime = new Date();
         deletable = false;
         tempSaveForNextMonthIsLeap = null;
-        number = ++seq;
+        number = genNumber();
+    }
+
+    protected int genNumber() {
+        return ++seq;
     }
 
     private void verifyRepeatAndAdvancedUnitMatch() {
@@ -183,7 +187,7 @@ public class Reminder implements Comparable<Reminder> {
         return ret.toString();
     }
 
-    public long getNumber() {
+    public int getNumber() {
         return number;
     }
 }

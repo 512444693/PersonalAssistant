@@ -8,6 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by zhangmin on 2016/6/22.
@@ -17,7 +19,7 @@ public class ReminderMgrTest {
     //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
 
 
-    //TODO : 删除接口 removeAccordingToNumber(long number);
+    //TODO-working-on : 删除接口 removeAccordingToNumber(long number);
 
     //TODO : 不重复提醒过期后被删除
 
@@ -189,5 +191,21 @@ public class ReminderMgrTest {
             next = list.get(i + 1);
             assertTrue(next.compareTo(one) >= 0);
         }
+    }
+
+    @Test
+    public void testRemoveAccordingToNumber(){
+        class ReminderStub extends Reminder{
+
+            public ReminderStub(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
+                super(lunar, remindTime, repeat, info, advancedNotifyStr);
+            }
+
+            public int genNumber(){
+                return 20;
+            }
+        }
+        Reminder reminder = new ReminderStub(true, new LunarCalendar(), Repeat.DAY, "asdf", "");
+        System.out.println(reminder.getNumber());
     }
 }
