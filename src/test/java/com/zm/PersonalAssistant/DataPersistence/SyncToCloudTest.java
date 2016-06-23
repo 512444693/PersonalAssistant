@@ -162,3 +162,7 @@ public class SyncToCloudTest {
         verify(mockDropBox, never()).uploadFile(contains("SynToCloudTest.java"));
     }
 }
+
+//TODO : 写文件-写一个暂时文件，写完之后再替换原来的文件，之后传到云端
+
+//TODO : 读文件-直接读正式的文件，若存在暂时文件，则删除它

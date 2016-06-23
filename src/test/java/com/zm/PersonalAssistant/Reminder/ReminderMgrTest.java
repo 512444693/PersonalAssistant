@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by zhangmin on 2016/6/22.
  */
@@ -46,10 +48,11 @@ public class ReminderMgrTest {
     }
 
     //TODO: (多少分钟/小时/天/星期/月/年)后  按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
-    //TODO : (几年几月几号几时几分)           按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
+    //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
 
 
     //TODO : 添加，更新（得到通知） Reminder 列表顺序测试
+    //TODO : 删除接口，remove(Object) remove(index)
 
     //TODO : 不重复提醒的一天后被删除
 
@@ -59,9 +62,28 @@ public class ReminderMgrTest {
 
     //TODO : 得到所有Reminder
 
-    @Test
-    public void testGetNextDaysList(){
+    //TODO : 得到提醒
 
+    //TODO : 数据持久化
+
+    @Test
+    public void testGetAllReminders(){
+
+    }
+
+    @Test
+    public void testAdd(){
+        //Arrange
+        ReminderMgr rm = ReminderMgr.getInstance();
+        LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 23, 14, 0);
+        Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "2/hour;3/minute");
+
+        //Act
+        rm.add(reminder1);
+
+        //Assert
+        //List<Reminder> list = rm.getAllReminders();
+        //assertEquals(reminder1, list.get(0));
     }
 
 }

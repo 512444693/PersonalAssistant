@@ -89,7 +89,7 @@ public class LunarCalendar implements Comparable<LunarCalendar> {
 
     @Override
     public String toString(){
-        return chineseCalendar.toString() + " " + this.getHour() + "时" + this.getMinute() + "分";
+        return chineseCalendar.toString();
     }
 
     public int getHour() {
@@ -477,7 +477,8 @@ final class ChineseCalendar extends GregorianCalendar {
 
     public String toString() {
         StringBuffer buf = new StringBuffer();
-        buf.append(getSimpleGregorianDateString()).append(" | ")
+        buf.append(getSimpleGregorianDateString()).append(" ")
+                .append(get(HOUR_OF_DAY)).append("时").append(get(MINUTE)).append("分").append(" | ")
                 .append(getChinese(DAY_OF_WEEK)).append(" | [农历]")
                 .append(getChineseDateString()).append(" ")
                 .append(getChinese(CHINESE_ZODIAC)).append("年 ")

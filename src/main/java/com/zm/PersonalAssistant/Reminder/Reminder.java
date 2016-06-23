@@ -20,6 +20,10 @@ public class Reminder implements Comparable<Reminder> {
     //程序内部使用
     private LunarCalendar tempSaveForNextMonthIsLeap;
 
+    private static final String notifyFormat = "【%s】\r\n事件:【%s】\r\n时间:【%s】\r\n附加:【%s】";
+    private static final String[] notifyLeapMonthInfo = {"无", "下月是闰月", "本月是闰月"};
+    private static final String toStringFormat = "【按照%s】 【时间：%s】 【重复：%s】 【提前：%s通知】 【信息：%s】";
+
     public Reminder(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
         this.lunar = lunar;
         this.remindTime = remindTime;
@@ -67,13 +71,13 @@ public class Reminder implements Comparable<Reminder> {
         String ret = "";
         if(!deletable){
             if(this.compare(timeNow, remindTime) >= 0){
-                ret =  genNotifyStr("正式提醒");
+                ret =  genNotifyStr("正式通知");
                 resetAdvancedNotifyList();
                 repeat();
             }else {
                 for(AdvancedNotify aNotify : advancedNotifyList){
                     if(this.compare(timeNow, getAdvancedTime(aNotify)) >= 0){
-                        ret = genNotifyStr("提前提醒");
+                        ret = genNotifyStr("提前通知");
                         aNotify.alreadyNotify = true;
                     }
                 }
@@ -83,14 +87,7 @@ public class Reminder implements Comparable<Reminder> {
     }
 
     private String genNotifyStr(String prefix){
-        String ret = "";
-        ret =  prefix +  ":\r\n" + info + "\r\n" + remindTime;//TODO : 优化
-        if(remindTime.isLeapMonth() == 1){
-            ret += "\t下月是闰月";
-        }else if(remindTime.isLeapMonth() == 2){
-            ret += "\t本月是闰月";
-        }
-        return ret;
+        return String.format(notifyFormat, prefix, info, remindTime, notifyLeapMonthInfo[remindTime.isLeapMonth()]);
     }
 
     private void repeat() {
@@ -164,5 +161,19 @@ public class Reminder implements Comparable<Reminder> {
     @Override
     public int compareTo(Reminder o) {
         return this.remindTime.compareTo(o.getRemindTime());
+    }
+
+    @Override
+    public String toString(){
+        return String.format(toStringFormat, isLunar() ? "农历" : "阳历",
+                remindTime.toString(), repeat.getDescribe(), getAdvancedNotifyStr(), info);
+    }
+
+    private String getAdvancedNotifyStr(){
+        StringBuilder ret = new StringBuilder();
+        for(AdvancedNotify aNotify : advancedNotifyList){
+            ret.append(aNotify.num).append(aNotify.unit.getDescribe()).append(" ");
+        }
+        return ret.toString();
     }
 }
