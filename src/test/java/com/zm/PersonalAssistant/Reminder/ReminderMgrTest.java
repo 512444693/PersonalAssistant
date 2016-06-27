@@ -11,8 +11,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by zhangmin on 2016/6/22.
@@ -277,9 +275,4 @@ public class ReminderMgrTest {
     //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
 
     //TODO : 数据持久化 和 恢复 ,实现sequence接口 定义一个数据持久化和恢复的公用接口
-
-    //TODO : 程序刚启动时：1.读取配置文件 2.从文件恢复数据 3.log4j配置 PropertyConfigurator.configure("conf/log4j.properties") 4.同步所有数据到云端 5.创建其它线程
-    //                          任何步骤失败，程序退出, 若成功则循环等待或者join
-
-    //TODO : 配置：1.是否使用DroBox 2.client邮箱配置 server邮箱配置  邮箱其它配置3.多长时间检查提醒事项一次
 }

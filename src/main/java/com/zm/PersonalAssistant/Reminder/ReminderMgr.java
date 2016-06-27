@@ -111,6 +111,7 @@ public class ReminderMgr {
         }
         String ret = toString(remindersInDays);
         readLock.unlock();
+        log.debug("Get reminders in next " + days + "days : " + ret);
         return ret;
     }
 
@@ -118,6 +119,7 @@ public class ReminderMgr {
         readLock.lock();
         String ret = toString(this.list.subList(0, count));
         readLock.unlock();
+        log.debug("Get next " + count + " reminders: " + ret);
         return ret;
     }
 
@@ -125,6 +127,7 @@ public class ReminderMgr {
         readLock.lock();
         String ret = toString(this.list);
         readLock.unlock();
+        log.debug("Get all reminders: " + ret);
         return ret;
     }
 }
