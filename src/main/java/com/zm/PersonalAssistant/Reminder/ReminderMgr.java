@@ -21,13 +21,12 @@ public class ReminderMgr {
 
     private ReminderMgr(){}
 
-    @Override
-    public String toString(){
+    public String toString(List<Reminder> listToDisplay){
         StringBuilder ret = new StringBuilder();
         Reminder reminder;
         readLock.lock();
-        for(int i = 0; i < list.size(); i++) {
-            reminder = list.get(i);
+        for(int i = 0; i < listToDisplay.size(); i++) {
+            reminder = listToDisplay.get(i);
             ret.append(i).append(". ").append(reminder).append("\r\n");
         }
         readLock.unlock();
@@ -40,17 +39,6 @@ public class ReminderMgr {
         log.info("Add a reminder : " + reminder);
         writeLock.unlock();
         sort();
-    }
-
-    public void remove(int index) {
-        writeLock.lock();
-        if(index < 0 || index >= list.size()){
-            log.error("Remove reminder fail：没有index为" + index + "的Reminder");
-            throw new IllegalArgumentException("没有index为" + index + "的Reminder");
-        }
-        Reminder reminder = list.remove(index);
-        writeLock.unlock();
-        log.info("Remove a reminder : " + index + ". " + reminder);
     }
 
     public String getNotify(LunarCalendar timeNow){
@@ -90,5 +78,53 @@ public class ReminderMgr {
     //for test
     protected List<Reminder> getAllReminders() {
         return list;
+    }
+
+    public void removeAccordingToNumber(int num){
+        writeLock.lock();
+        boolean found = false;
+        for(Reminder reminder : list){
+            if(reminder.getNumber() == num){
+                found = true;
+                list.remove(reminder);
+                log.info("Remove a reminder according to num " + num + " : " + reminder);
+                break;
+            }
+        }
+        if(!found){
+            log.error("Remove reminder fail : Can not find a reminder whose number is " + num);
+            throw new IllegalArgumentException("Remove reminder fail : Can not find a reminder whose number is " + num);
+        }
+        writeLock.unlock();
+    }
+
+    public String getReminderStrNextDays(LunarCalendar timeNow, int days){
+        List<Reminder> remindersInDays = new ArrayList<>();
+        LunarCalendar sevenDayLater = new LunarCalendar(false, timeNow.getYear(), timeNow.getMonth(), timeNow.getDate());
+        sevenDayLater.addDate(days);
+        sevenDayLater.addMinute(-1);
+        readLock.lock();
+        for(Reminder reminder : this.list) {
+            if(sevenDayLater.compareTo(reminder.getRemindTime()) >= 0 && timeNow.compareTo(reminder.getRemindTime()) <= 0){
+                remindersInDays.add(reminder);
+            }
+        }
+        String ret = toString(remindersInDays);
+        readLock.unlock();
+        return ret;
+    }
+
+    public String getReminderStrCount(int count){
+        readLock.lock();
+        String ret = toString(this.list.subList(0, count));
+        readLock.unlock();
+        return ret;
+    }
+
+    public String getAllReminderStr(){
+        readLock.lock();
+        String ret = toString(this.list);
+        readLock.unlock();
+        return ret;
     }
 }

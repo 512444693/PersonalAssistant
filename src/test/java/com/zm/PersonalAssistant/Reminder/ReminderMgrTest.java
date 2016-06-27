@@ -4,6 +4,9 @@ import com.zm.PersonalAssistant.utils.LunarCalendar;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.*;
+
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -15,30 +18,6 @@ import static org.mockito.Mockito.when;
  * Created by zhangmin on 2016/6/22.
  */
 public class ReminderMgrTest {
-    //TODO: (多少分钟/小时/天/星期/月/年)后  按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
-    //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
-
-
-    //TODO-working-on : 删除接口 removeAccordingToNumber(long number);
-
-    //TODO : 不重复提醒过期后被删除
-
-    //TODO : 得到几天内的Reminder列表
-
-    //TODO : 得到接下来多少个Reminder列表
-
-    //TODO : 得到所有Reminder
-
-    //TODO : 数据持久化 和 恢复 ,实现sequence接口 定义一个数据持久化和恢复的公用接口
-
-    //TODO : 线程设计，是否加锁
-
-    //TODO : 程序刚启动时：1.读取配置文件 2.从文件恢复数据 3.log4j配置 PropertyConfigurator.configure("conf/log4j.properties")
-    //                          4.同步所有数据到云端 5.创建其它线程
-    //                          任何步骤失败，程序退出, 若成功则循环等待或者join
-
-    //TODO : 1.是否使用DroBox 2.多个client邮箱配置 1个server邮箱配置 3.多长时间检查提醒事项一次
-
     @Before
     public void resetReminderMgr(){
         ReminderMgr rm = ReminderMgr.getInstance();
@@ -82,7 +61,6 @@ public class ReminderMgrTest {
 
         List<Reminder> list = rm.getAllReminders();
         //Assert
-        System.out.println(rm);
         assertEquals(4, list.size());
         testOrder(list);
     }
@@ -94,27 +72,27 @@ public class ReminderMgrTest {
 
         //Act
         LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
-        Reminder reminder1 = new Reminder(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        Reminder reminder1 = new ReminderStub(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
         rm.add(reminder1);
 
         timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
+        Reminder reminder2 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
         rm.add(reminder2);
 
         timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
-        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        Reminder reminder3 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
         rm.add(reminder3);
 
         timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
-        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        Reminder reminder4 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
         rm.add(reminder4);
 
         List<Reminder> list = rm.getAllReminders();
-        rm.remove(1);
+        rm.removeAccordingToNumber(13);
         assertEquals(3, list.size());
         testOrder(list);
 
-        rm.remove(1);
+        rm.removeAccordingToNumber(14);
         assertEquals(2, list.size());
         testOrder(list);
     }
@@ -123,7 +101,7 @@ public class ReminderMgrTest {
     @Test(expected = IllegalArgumentException.class)
     public void testRemoveIllegalNoReminders(){
         ReminderMgr rm = ReminderMgr.getInstance();
-        rm.remove(1);
+        rm.removeAccordingToNumber(11);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -132,23 +110,23 @@ public class ReminderMgrTest {
         ReminderMgr rm = ReminderMgr.getInstance();
 
         LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
-        Reminder reminder1 = new Reminder(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        Reminder reminder1 = new ReminderStub(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
         rm.add(reminder1);
 
         timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
+        Reminder reminder2 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
         rm.add(reminder2);
 
         timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
-        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        Reminder reminder3 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
         rm.add(reminder3);
 
         timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
-        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        Reminder reminder4 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
         rm.add(reminder4);
 
         //Act
-        rm.remove(4);
+        rm.removeAccordingToNumber(5);
     }
 
     @Test
@@ -193,19 +171,115 @@ public class ReminderMgrTest {
         }
     }
 
-    @Test
-    public void testRemoveAccordingToNumber(){
-        class ReminderStub extends Reminder{
-
-            public ReminderStub(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
-                super(lunar, remindTime, repeat, info, advancedNotifyStr);
-            }
-
-            public int genNumber(){
-                return 20;
-            }
+    static int seqStub = 10;
+    class ReminderStub extends Reminder{
+        public ReminderStub(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
+            super(lunar, remindTime, repeat, info, advancedNotifyStr);
         }
-        Reminder reminder = new ReminderStub(true, new LunarCalendar(), Repeat.DAY, "asdf", "");
-        System.out.println(reminder.getNumber());
+
+        public int genNumber(){
+            return ++seqStub;
+        }
     }
+
+    @Test
+    public void testGetAllReminderStr(){
+        //Arrange
+        ReminderMgr rm = ReminderMgr.getInstance();
+
+        //Act
+        LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
+        Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        rm.add(reminder1);
+
+        timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.NEVER, "张三的生日", "");
+        rm.add(reminder2);
+
+        timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
+        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        rm.add(reminder3);
+
+        timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
+        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        rm.add(reminder4);
+
+        //Assert
+        assertThat(rm.getAllReminderStr(), containsString("该上课了"));
+        assertThat(rm.getAllReminderStr(), containsString("张三的生日"));
+        assertThat(rm.getAllReminderStr(), containsString("李四的生日"));
+        assertThat(rm.getAllReminderStr(), containsString("该上班了"));
+    }
+
+    @Test
+    public void testGetReminderStrCount(){
+        //Arrange
+        ReminderMgr rm = ReminderMgr.getInstance();
+
+        //Act
+        LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
+        Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        rm.add(reminder1);
+
+        timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.NEVER, "张三的生日", "");
+        rm.add(reminder2);
+
+        timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
+        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        rm.add(reminder3);
+
+        timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
+        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        rm.add(reminder4);
+
+        //Assert
+        assertThat(rm.getReminderStrCount(2), containsString("张三的生日"));
+        assertThat(rm.getReminderStrCount(2), containsString("李四的生日"));
+        assertThat(rm.getReminderStrCount(2), not(containsString("该上课了")));
+        assertThat(rm.getReminderStrCount(2), not(containsString("该上班了")));
+
+        assertThat(rm.getReminderStrCount(0), is(""));
+    }
+
+    @Test
+    public void testGetReminderStrNextDays(){
+        //Arrange
+        ReminderMgr rm = ReminderMgr.getInstance();
+
+        //Act
+        LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 26, 0, 0);
+        Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        rm.add(reminder1);
+
+        timeToSchool = new LunarCalendar(false, 2016, 6, 25, 23, 59);
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.NEVER, "张三的生日", "");
+        rm.add(reminder2);
+
+        timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 57);
+        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        rm.add(reminder3);
+
+        timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
+        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        rm.add(reminder4);
+
+        //Assert
+        LunarCalendar timeNow = new LunarCalendar(false, 2016, 6, 22, 14, 57);
+        assertThat(rm.getReminderStrNextDays(timeNow, 4),containsString("张三的生日"));
+        assertThat(rm.getReminderStrNextDays(timeNow, 4),containsString("李四的生日"));
+        assertThat(rm.getReminderStrNextDays(timeNow, 4),not(containsString("该上课了")));
+        assertThat(rm.getReminderStrNextDays(timeNow, 4),not(containsString("该上班了")));
+        assertThat(rm.getReminderStrNextDays(timeNow, 0), is(""));
+    }
+
+    //TODO: (多少分钟/小时/天/星期/月/年)后  按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
+    //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
+
+    //TODO : 数据持久化 和 恢复 ,实现sequence接口 定义一个数据持久化和恢复的公用接口
+
+    //TODO : 程序刚启动时：1.读取配置文件 2.从文件恢复数据 3.log4j配置 PropertyConfigurator.configure("conf/log4j.properties") 4.同步所有数据到云端 5.创建其它线程
+    //                          任何步骤失败，程序退出, 若成功则循环等待或者join
+
+    //TODO : 配置：1.是否使用DroBox 2.client邮箱配置 server邮箱配置  邮箱其它配置3.多长时间检查提醒事项一次
 }
