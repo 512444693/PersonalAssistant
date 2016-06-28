@@ -1,6 +1,5 @@
 package com.zm.PersonalAssistant.utils;
 
-import com.sun.deploy.util.*;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import org.apache.log4j.Logger;
@@ -161,12 +160,12 @@ public class Mail {
                     log.debug("发件人:" + from + "\r\n" + "主题:" + getSubject(messages[i]) + "\r\n" + "内容:" + getContent(messages[i]));
 
                     //自动回复
-                    /*MimeMessage replayMessage = (MimeMessage) messages[i].reply(true);
+                    MimeMessage replayMessage = (MimeMessage) messages[i].reply(true);
                     replayMessage.setFrom(new InternetAddress(USER));
                     replayMessage.setRecipients(MimeMessage.RecipientType.TO, messages[i].getFrom());
                     replayMessage.setText("This is replay mail, good luck");
                     send(replayMessage);
-                    replayMessage.saveChanges();*/
+                    replayMessage.saveChanges();
 
                 }
                 //无论是否已读，都删除
@@ -228,9 +227,7 @@ public class Mail {
          }
         return "";
     }
-
-
-
+    
     //判断是否为已读
     private boolean isSeen(Message msg) throws MessagingException {
         Flags flags = msg.getFlags();
@@ -247,8 +244,8 @@ public class Mail {
 
     public static void main(String[] args) throws Exception {
         final Mail mail = new Mail();
-        long start = new Date().getTime();
-        Thread t = new Thread(new Runnable() {
+
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while(true){
@@ -260,11 +257,7 @@ public class Mail {
                     mail.rec();
                 }
             }
-        });
-        t.start();
-        t.join();
-        long end = new Date().getTime();
-        System.out.println(end - start);
+        }).start();
     }
 
 }
