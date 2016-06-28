@@ -3,10 +3,8 @@ package com.zm.PersonalAssistant.configuration;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -15,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by zhangmin on 2016/6/27.
  */
-public class ConfigurationTest {
+public class ConfigTest {
 
     private  ByteArrayInputStream byteArrayInputStream;
 
@@ -35,7 +33,7 @@ public class ConfigurationTest {
     public void test_get_use_dropBox_is_true() throws IOException {
 
         //Arrange
-        byteArrayInputStream = new ByteArrayInputStream("useDropBox=true".getBytes());
+        byteArrayInputStream = new ByteArrayInputStream("useDropBox=true\r\ncheckInterval=10".getBytes());
 
         //Act
         ConfigStub conf = new ConfigStub("test.properties");
@@ -48,7 +46,7 @@ public class ConfigurationTest {
     public void test_get_use_dropBox_is_false() throws IOException {
 
         //Arrange
-        byteArrayInputStream = new ByteArrayInputStream("\r\nuseDropBox=false".getBytes());
+        byteArrayInputStream = new ByteArrayInputStream("\r\nuseDropBox=false\r\ncheckInterval=10".getBytes());
 
         //Act
         ConfigStub conf = new ConfigStub("test.properties");
