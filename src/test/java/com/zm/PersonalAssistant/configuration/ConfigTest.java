@@ -17,7 +17,7 @@ public class ConfigTest {
 
     private  ByteArrayInputStream byteArrayInputStream;
 
-    class ConfigStub extends Config{
+    class ConfigStub extends MyConfig {
 
         public ConfigStub(String filePath) throws IOException {
             super(filePath);
@@ -69,7 +69,7 @@ public class ConfigTest {
     public void test_read_configuration_file_not_exist() throws IOException {
 
         //Arrange
-        Config conf = new Config("conf.properties");//conf.properties is not exist
+        Config conf = new MyConfig("conf.properties");//conf.properties is not exist
     }
 
     @Test
