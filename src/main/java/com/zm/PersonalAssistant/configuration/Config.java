@@ -42,7 +42,12 @@ public class Config {
             log.error(property + "配置错误");
             throw new IllegalStateException(property + "配置错误");
         } else {
-            ret = Integer.parseInt(retStr);
+            try {
+                ret = Integer.parseInt(retStr);
+            } catch (Exception e) {
+                log.error(property + "配置错误", e);
+                throw new IllegalStateException(property + "配置错误: " + e.getMessage());
+            }
         }
         return ret;
     }
