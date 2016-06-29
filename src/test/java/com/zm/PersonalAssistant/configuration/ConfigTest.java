@@ -101,5 +101,5 @@ public class ConfigTest {
     //TODO : 程序刚启动时：1.读取配置文件 2.从文件恢复数据 3.log4j配置 PropertyConfigurator.configure("conf/log4j.properties") 4.同步所有数据到云端 5.创建其它线程
     //                          任何步骤失败，程序退出, 若成功则循环等待或者join
 
-    //TODO : 配置：2.client邮箱配置 server邮箱配置  邮箱其它配置
+    //TODO : 配置：2.client邮箱配置 server邮箱配置  邮箱其它配置 3.收取邮件时间间隔
 }

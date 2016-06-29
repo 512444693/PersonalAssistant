@@ -5,6 +5,7 @@ import com.sun.mail.imap.IMAPStore;
 import org.apache.log4j.Logger;
 
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
@@ -150,32 +151,19 @@ public class Mail {
             if (folder.getUnreadMessageCount() > 0) {
                 log.debug("收取到" + folder.getUnreadMessageCount() + "封未读邮件");
             }
-
             Message[] messages = folder.getMessages();
-            for (int i = 0; i < messages.length; i++) {
-
-                String from = getFrom(messages[i]);
+            for (Message message : messages) {
+                String from = getFrom(message);
                 //未读邮件且发件人固定
-                if (!isSeen(messages[i]) && from.equals(MAIL_TO)) {
-                    log.debug("发件人:" + from + "\r\n" + "主题:" + getSubject(messages[i]) + "\r\n" + "内容:" + getContent(messages[i]));
-
-                    //自动回复
-                    MimeMessage replayMessage = (MimeMessage) messages[i].reply(true);
-                    replayMessage.setFrom(new InternetAddress(USER));
-                    replayMessage.setRecipients(MimeMessage.RecipientType.TO, messages[i].getFrom());
-                    replayMessage.setText("This is replay mail, good luck");
-                    send(replayMessage);
-                    replayMessage.saveChanges();
-
+                if (!isSeen(message) && from.equals(MAIL_TO)) {
+                    process(message);
                 }
                 //无论是否已读，都删除
+                setSeenAndDelete(message);
                 log.debug("删除邮件，发件人:" + from);
-                setSeenAndDelete(messages[i]);
             }
 
         } catch (MessagingException e) {
-            log.error("收取邮件异常", e);
-        } catch (IOException e) {
             log.error("收取邮件异常", e);
         } finally {
             //4、关闭folder
@@ -183,8 +171,29 @@ public class Mail {
                 if (folder != null)
                     folder.close(true);
             } catch (MessagingException e) {
-                log.error("folder or sotre close exception", e);
+                log.error("folder or store close exception", e);
             }
+        }
+    }
+
+    protected void process(Message message) {
+        try {
+            String from = getFrom(message);
+            String subject = getSubject(message);
+            String Content = getContent(message);
+            log.debug("发件人:" + from + "\r\n" + "主题:" + subject + "\r\n" + "内容:" + Content);
+
+            //自动回复
+            MimeMessage replayMessage = (MimeMessage) message.reply(true);
+            replayMessage.setFrom(new InternetAddress(USER));
+            replayMessage.setRecipients(MimeMessage.RecipientType.TO, message.getFrom());
+            replayMessage.setText("This is replay mail, good luck");
+            replayMessage.saveChanges();
+            send(replayMessage);
+        } catch (MessagingException e) {
+            log.error("处理：回复邮件失败", e);
+        } catch (IOException e) {
+            log.error("获取邮件信息失败", e);
         }
     }
 
@@ -198,13 +207,7 @@ public class Mail {
     }
 
     private String getSubject(Message msg) throws MessagingException, UnsupportedEncodingException {
-        String subject = "";
-        try {
-            subject = MimeUtility.decodeText(msg.getSubject());
-        } catch (UnsupportedEncodingException e) {
-            log.error("解码邮件主题失败");
-            throw e;
-        }
+        String subject = msg.getSubject();
         return subject == null ? "" : subject.trim();
     }
 
