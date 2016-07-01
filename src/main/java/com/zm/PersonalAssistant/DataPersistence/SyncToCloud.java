@@ -1,6 +1,6 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import java.io.IOException;
  */
 public class SyncToCloud {
     private CloudPlatform cloudPlatform;
-    private static final Logger log = Logger.getLogger(SyncToCloud.class);
 
     public SyncToCloud(CloudPlatform cloudPlatform) {
         this.cloudPlatform = cloudPlatform;

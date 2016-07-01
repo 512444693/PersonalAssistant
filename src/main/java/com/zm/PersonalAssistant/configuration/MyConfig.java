@@ -1,6 +1,7 @@
 package com.zm.PersonalAssistant.configuration;
 
 import java.io.IOException;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 /**
  * Created by zhangmin on 2016/6/27.

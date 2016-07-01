@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zm.PersonalAssistant.Reminder.AdvancedUnit.*;
-
 /**
  * Created by zhangmin on 2016/6/21.
  */

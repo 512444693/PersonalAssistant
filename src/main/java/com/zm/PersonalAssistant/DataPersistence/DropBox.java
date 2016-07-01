@@ -6,7 +6,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.DbxPathV2;
 import com.dropbox.core.v2.files.*;
 import com.zm.PersonalAssistant.utils.StringUtils;
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,6 @@ import java.util.Date;
  */
 public class DropBox extends CloudPlatform {
 
-    private static final Logger log = Logger.getLogger(DropBox.class);
     private final DbxClientV2 dbxClient;
 
     private static final long CHUNKED_UPLOAD_CHUNK_SIZE = 8L << 20; // 8MiB

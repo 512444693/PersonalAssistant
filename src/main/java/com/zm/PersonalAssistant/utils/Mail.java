@@ -2,24 +2,19 @@ package com.zm.PersonalAssistant.utils;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.Properties;
 
 /**
  * Created by zhangmin on 2016/6/28.
  */
 public class Mail {
-
-    private static final Logger log = Logger.getLogger(Mail.class);
 
     private static final String MAIL_SERVER_HOST_SMTP = "smtp.163.com";
 

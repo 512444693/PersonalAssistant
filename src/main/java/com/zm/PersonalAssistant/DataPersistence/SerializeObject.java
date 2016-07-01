@@ -1,19 +1,16 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
-import com.zm.PersonalAssistant.Reminder.ReminderMgr;
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * 一个类只可以序列化一个实体
  * Created by zhangmin on 2016/7/1.
  */
 public class SerializeObject {
-    private static final Logger log = Logger.getLogger(SerializeObject.class);
     private static final Map<Class, Object> classMap = new HashMap<>();
 
     public static void serialize(Object object) {

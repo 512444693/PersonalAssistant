@@ -1,16 +1,14 @@
 package com.zm.PersonalAssistant.configuration;
 
-import org.apache.log4j.Logger;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 /**
  * Created by zhangmin on 2016/6/29.
  */
 public class Config {
-    protected static final Logger log = Logger.getLogger(Config.class);
     protected Properties properties;
 
     public Config(String filePath) throws IOException {

@@ -1,7 +1,7 @@
 package com.zm.PersonalAssistant.Reminder;
 
 import com.zm.PersonalAssistant.utils.LunarCalendar;
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 
 import java.io.Serializable;
 import java.util.*;
@@ -12,7 +12,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Created by zhangmin on 2016/6/23.
  */
 public class ReminderMgr implements Serializable {
-    private transient  Logger  log = Logger.getLogger(ReminderMgr.class);
     private List<Reminder> list = new ArrayList<>();
     private static final ReminderMgr instance = new ReminderMgr();
 
