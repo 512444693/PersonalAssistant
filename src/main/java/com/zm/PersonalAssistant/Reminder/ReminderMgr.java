@@ -37,8 +37,8 @@ public class ReminderMgr {
         writeLock.lock();
         list.add(reminder);
         log.info("Add a reminder : " + reminder);
-        writeLock.unlock();
         sort();
+        writeLock.unlock();
     }
 
     public String getNotify(LunarCalendar timeNow){
@@ -59,16 +59,14 @@ public class ReminderMgr {
                 log.info("Remove a expired reminder : " + reminder);
             }
         }
-        writeLock.unlock();
         sort();
+        writeLock.unlock();
         log.debug("Get notifies : " + ret.toString());
         return ret.toString();
     }
 
     private void sort(){
-        writeLock.lock();
         Collections.sort(list);
-        writeLock.unlock();
     }
 
     public static ReminderMgr getInstance() {
