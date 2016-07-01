@@ -1,5 +1,6 @@
 package com.zm.PersonalAssistant.utils;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -8,7 +9,7 @@ import java.util.GregorianCalendar;
  * Created by zhangmin on 2016/6/18.
  * 粒度为分钟
  */
-public class LunarCalendar implements Comparable<LunarCalendar> {
+public class LunarCalendar implements Comparable<LunarCalendar>,Serializable {
     private ChineseCalendar chineseCalendar;
 
     public LunarCalendar(){

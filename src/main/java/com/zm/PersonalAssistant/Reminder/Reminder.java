@@ -2,13 +2,14 @@ package com.zm.PersonalAssistant.Reminder;
 
 import com.zm.PersonalAssistant.utils.LunarCalendar;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by zhangmin on 2016/6/21.
  */
-public class Reminder implements Comparable<Reminder> {
+public class Reminder implements Comparable<Reminder>,Serializable {
     private final boolean lunar;
     private LunarCalendar remindTime;
     private final Repeat repeat;
@@ -100,7 +101,7 @@ public class Reminder implements Comparable<Reminder> {
     }
 
     private void repeat() {
-        //若本月的下一个月是闰月，则直接加到下
+        //若本月的下一个月是闰月，则直接加到下一个月
         if(isLunar() && remindTime.isLeapMonth() == 1){
             tempSaveForNextMonthIsLeap = remindTime;
             remindTime.addChineseMonth(1);

@@ -1,5 +1,6 @@
 package com.zm.PersonalAssistant.Reminder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import static com.zm.PersonalAssistant.Reminder.AdvancedUnit.*;
 /**
  * Created by zhangmin on 2016/6/21.
  */
-public class AdvancedNotify {
+public class AdvancedNotify implements Serializable {
     public final int num;
     public final AdvancedUnit unit;
     public boolean alreadyNotify;

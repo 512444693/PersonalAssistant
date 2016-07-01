@@ -3,6 +3,7 @@ package com.zm.PersonalAssistant.Reminder;
 import com.zm.PersonalAssistant.utils.LunarCalendar;
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -10,10 +11,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by zhangmin on 2016/6/23.
  */
-public class ReminderMgr {
-    private Logger log = Logger.getLogger(ReminderMgr.class);
+public class ReminderMgr implements Serializable {
+    private transient  Logger  log = Logger.getLogger(ReminderMgr.class);
     private List<Reminder> list = new ArrayList<>();
-    private static ReminderMgr instance = new ReminderMgr();
+    private static final ReminderMgr instance = new ReminderMgr();
 
     private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();
@@ -127,5 +128,10 @@ public class ReminderMgr {
         readLock.unlock();
         log.debug("Get all reminders: " + ret);
         return ret;
+    }
+
+    //解决单例模式序列化问题，保证反序列化后还是指向一个对象
+    private Object readResolve() {
+        return instance;
     }
 }
