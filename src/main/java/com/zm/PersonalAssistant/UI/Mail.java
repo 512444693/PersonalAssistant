@@ -1,7 +1,9 @@
-package com.zm.PersonalAssistant.utils;
+package com.zm.PersonalAssistant.UI;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.zm.PersonalAssistant.utils.LunarCalendar;
+
 import static com.zm.PersonalAssistant.utils.Log.log;
 
 import javax.mail.*;
@@ -20,11 +22,13 @@ public class Mail {
 
     private static final String MAIL_SERVER_HOST_IMAP = "imap.163.com";
 
-    private static final String USER = "information_rec@163.com";
+    private static final String FIXED_SENTENCE = "系统消息，请认真查看";
 
-    private static final String PASSWORD = "zhangmin";
+    private String user;
 
-    private static final String MAIL_TO = "512444693@qq.com";
+    private String password;
+
+    private String mailTo;
 
     private final Session session;
 
@@ -32,7 +36,11 @@ public class Mail {
 
     private final IMAPStore store;
 
-    public Mail() throws MessagingException {
+    public Mail(String user, String password, String mailTo) throws MessagingException {
+        this.user = user;;
+        this.password = password;
+        this.mailTo = mailTo;
+
         Properties prop = new Properties();
 
         //prop.setProperty("mail.debug", "true");
@@ -70,8 +78,12 @@ public class Mail {
         log.info("mail 对象创建成功");
     }
 
-    public void sendTextToFixedClient(String subject, String text) {
-        sendText(MAIL_TO, subject, text);
+    public void send(String text) {
+        sendTextToFixedClient(FIXED_SENTENCE, text);
+    }
+
+    private void sendTextToFixedClient(String subject, String text) {
+        sendText(mailTo, subject, text);
     }
 
     private void sendText(String mailTo, String subject, String text) {
@@ -82,7 +94,7 @@ public class Mail {
         try {
             //2、邮件消息头
             //邮件发件人
-            message.setFrom(new InternetAddress(USER));
+            message.setFrom(new InternetAddress(user));
             //邮件收件人
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailTo));
 
@@ -107,8 +119,7 @@ public class Mail {
             subject = message.getSubject();
 
             //1、连上邮件服务器
-            transport.connect(MAIL_SERVER_HOST_SMTP, USER, PASSWORD);
-
+            transport.connect(MAIL_SERVER_HOST_SMTP, user, password);
 
             //2、发送邮件
             transport.sendMessage(message, message.getAllRecipients());
@@ -128,14 +139,15 @@ public class Mail {
         }
     }
 
-    public void rec() {
+    public String  rec() {
+        String ret = "";
 
         IMAPFolder folder = null;
 
         try {
             //1、连接服务器
             if(!store.isConnected()) {
-                store.connect(MAIL_SERVER_HOST_IMAP, USER, PASSWORD);
+                store.connect(MAIL_SERVER_HOST_IMAP, user, password);
             }
 
             //2、获得邮箱中的INBOX
@@ -150,8 +162,12 @@ public class Mail {
             for (Message message : messages) {
                 String from = getFrom(message);
                 //未读邮件且发件人固定
-                if (!isSeen(message) && from.equals(MAIL_TO)) {
-                    process(message);
+                if (!isSeen(message) && from.equals(mailTo)) {
+                    //process(message);
+                    String subject = getSubject(message);
+                    String Content = getContent(message);
+                    log.debug("发件人:" + from + "\r\n" + "主题:" + subject + "\r\n" + "内容:" + Content);
+                    ret = Content;
                 }
                 //无论是否已读，都删除
                 setSeenAndDelete(message);
@@ -160,6 +176,8 @@ public class Mail {
 
         } catch (MessagingException e) {
             log.error("收取邮件异常", e);
+        } catch (IOException e) {
+            log.error("获取邮件信息失败", e);
         } finally {
             //4、关闭folder
             try {
@@ -169,9 +187,10 @@ public class Mail {
                 log.error("folder or store close exception", e);
             }
         }
+        return ret;
     }
 
-    protected void process(Message message) {
+/*    protected void process(Message message) {
         try {
             String from = getFrom(message);
             String subject = getSubject(message);
@@ -180,7 +199,7 @@ public class Mail {
 
             //自动回复
             MimeMessage replayMessage = (MimeMessage) message.reply(true);
-            replayMessage.setFrom(new InternetAddress(USER));
+            replayMessage.setFrom(new InternetAddress(user));
             replayMessage.setRecipients(MimeMessage.RecipientType.TO, message.getFrom());
             replayMessage.setText("This is replay mail, good luck");
             replayMessage.saveChanges();
@@ -190,7 +209,7 @@ public class Mail {
         } catch (IOException e) {
             log.error("获取邮件信息失败", e);
         }
-    }
+    }*/
 
     private String getFrom(Message msg) throws MessagingException {
 
@@ -240,22 +259,8 @@ public class Mail {
         msg.setFlag(Flags.Flag.DELETED, true);//删除
     }
 
-    public static void main(String[] args) throws Exception {
-        final Mail mail = new Mail();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mail.rec();
-                }
-            }
-        }).start();
+    public static void main(String[] args) throws MessagingException {
+        Mail mail = new Mail("information_rec@163.com", "zhangmin", "512444693@qq.com");
+        mail.send(new LunarCalendar().toString());
     }
-
 }

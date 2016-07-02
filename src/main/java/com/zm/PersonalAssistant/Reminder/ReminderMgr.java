@@ -72,7 +72,7 @@ public class ReminderMgr implements Serializable,Persistence {
         }
         sort();
         writeLock.unlock();
-        log.debug("Get notifies : " + ret.toString());
+        //log.debug("Get notifies : " + ret.toString());
         return ret.toString();
     }
 
