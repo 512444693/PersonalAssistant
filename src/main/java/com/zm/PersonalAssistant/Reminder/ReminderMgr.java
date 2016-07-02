@@ -19,6 +19,8 @@ public class ReminderMgr implements Serializable {
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
+    private int seq = 1000;
+
     private ReminderMgr(){}
 
     public String toString(List<Reminder> listToDisplay){
@@ -35,6 +37,7 @@ public class ReminderMgr implements Serializable {
 
     public void add(Reminder reminder){
         writeLock.lock();
+        reminder.setNumber(++seq);
         list.add(reminder);
         log.info("Add a reminder : " + reminder);
         sort();

@@ -1,9 +1,10 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
 import com.zm.PersonalAssistant.Reminder.Reminder;
+import com.zm.PersonalAssistant.Reminder.ReminderMgr;
 import com.zm.PersonalAssistant.Reminder.Repeat;
 import com.zm.PersonalAssistant.utils.LunarCalendar;
-import org.apache.log4j.Logger;
+import static com.zm.PersonalAssistant.utils.Log.log;
 import org.junit.Test;
 
 import java.io.File;
@@ -34,10 +35,12 @@ public class SerializeObjectTest {
         Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
         rm.add(reminder1);
         timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.NEVER, "张三的生日", "");
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.YEAR, "张三的生日", "");
         rm.add(reminder2);
 
-        File file = new File("com.zm.PersonalAssistant.DataPersistence.ReminderMgrStub");
+        rm.getNotify(new LunarCalendar(false, 2016, 6, 22, 13, 0));
+
+        File file = new File(rm.getClass().getName());
 
         //Act
         SerializeObject.serialize(rm);
@@ -59,20 +62,19 @@ public class SerializeObjectTest {
         //assertEquals(rm, rm2);
         assertThat(rm2.getAllReminderStr(), containsString("该上课了"));
         assertThat(rm2.getAllReminderStr(), containsString("张三的生日"));
-        LunarCalendar timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.NEVER, "张三的生日", "");
-        rm2.add(reminder2);
-        System.out.println(rm2.getAllReminderStr());
     }
+
+    //TODO : 反序列化后进行各种功能正确， 加入， 更新， 删除等
 }
 
 class ReminderMgrStub implements Serializable{
-    private transient Logger log = Logger.getLogger(ReminderMgrStub.class);
     private List<Reminder> list = new ArrayList<>();
 
     private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
+
+    private int seq = 1000;
 
     public ReminderMgrStub(){}
 
@@ -90,8 +92,9 @@ class ReminderMgrStub implements Serializable{
 
     public void add(Reminder reminder){
         writeLock.lock();
+        reminder.setNumber(++seq);
         list.add(reminder);
-        //log.info("Add a reminder : " + reminder);
+        log.info("Add a reminder : " + reminder);
         sort();
         writeLock.unlock();
     }
@@ -176,7 +179,7 @@ class ReminderMgrStub implements Serializable{
         readLock.lock();
         String ret = toString(this.list);
         readLock.unlock();
-        //log.debug("Get all reminders: " + ret);
+        log.debug("Get all reminders: " + ret);
         return ret;
     }
 }

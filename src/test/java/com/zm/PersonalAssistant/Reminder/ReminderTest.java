@@ -91,6 +91,9 @@ public class ReminderTest {
         assertFalse(reminder.getAdvancedNotifyList().get(2).alreadyNotify);
         assertFalse(reminder.getAdvancedNotifyList().get(3).alreadyNotify);
         assertTrue(reminder.getAdvancedNotifyList().get(4).alreadyNotify);
+        notify = reminder.getNotify(timeNow);
+        System.out.println(notify);
+        assertTrue(notify.equals(""));
 
         timeNow = new LunarCalendar(2016, 11, 15, 23, 59);
         notify = reminder.getNotify(timeNow);

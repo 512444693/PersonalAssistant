@@ -70,26 +70,28 @@ public class ReminderMgrTest {
 
         //Act
         LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
-        Reminder reminder1 = new ReminderStub(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        Reminder reminder1 = new Reminder(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
         rm.add(reminder1);
 
         timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
         rm.add(reminder2);
 
         timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
-        Reminder reminder3 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
         rm.add(reminder3);
 
         timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
-        Reminder reminder4 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
         rm.add(reminder4);
 
+        reminder1.setNumber(13);
         List<Reminder> list = rm.getAllReminders();
         rm.removeAccordingToNumber(13);
         assertEquals(3, list.size());
         testOrder(list);
 
+        reminder2.setNumber(14);
         rm.removeAccordingToNumber(14);
         assertEquals(2, list.size());
         testOrder(list);
@@ -108,19 +110,19 @@ public class ReminderMgrTest {
         ReminderMgr rm = ReminderMgr.getInstance();
 
         LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 6, 22, 14, 0);
-        Reminder reminder1 = new ReminderStub(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
+        Reminder reminder1 = new Reminder(true, timeToSchool.clone(), Repeat.DAY, "该上课了", "1/hour");
         rm.add(reminder1);
 
         timeToSchool = new LunarCalendar(1991, 11, 16, 0, 0);
-        Reminder reminder2 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
+        Reminder reminder2 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "张三的生日", "");
         rm.add(reminder2);
 
         timeToSchool = new LunarCalendar(1992, 11, 16, 0, 0);
-        Reminder reminder3 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
+        Reminder reminder3 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "李四的生日", "");
         rm.add(reminder3);
 
         timeToSchool = new LunarCalendar(false, 2016, 6, 25, 0, 0);
-        Reminder reminder4 = new ReminderStub(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
+        Reminder reminder4 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上班了", "");
         rm.add(reminder4);
 
         //Act
@@ -166,17 +168,6 @@ public class ReminderMgrTest {
             one = list.get(i);
             next = list.get(i + 1);
             assertTrue(next.compareTo(one) >= 0);
-        }
-    }
-
-    static int seqStub = 10;
-    class ReminderStub extends Reminder{
-        public ReminderStub(boolean lunar, LunarCalendar remindTime, Repeat repeat, String info, String advancedNotifyStr) {
-            super(lunar, remindTime, repeat, info, advancedNotifyStr);
-        }
-
-        public int genNumber(){
-            return ++seqStub;
         }
     }
 
@@ -273,6 +264,7 @@ public class ReminderMgrTest {
 
     //TODO: (多少分钟/小时/天/星期/月/年)后  按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
     //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
+    //TODO : 提醒的时间如果比现在的时间小，则不允许添加reminder
 
     //TODO : 数据持久化 和 恢复 ,实现sequence接口 定义一个数据持久化和恢复的公用接口
     //TODO : 收包与回包，定义接口

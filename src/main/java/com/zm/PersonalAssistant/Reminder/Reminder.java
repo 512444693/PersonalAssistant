@@ -5,6 +5,7 @@ import com.zm.PersonalAssistant.utils.LunarCalendar;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by zhangmin on 2016/6/21.
@@ -19,8 +20,7 @@ public class Reminder implements Comparable<Reminder>,Serializable {
     private boolean deletable;
 
     //编号
-    private final int number;
-    private static int seq = 1000;
+    private int number;
 
     //程序内部使用
     private LunarCalendar tempSaveForNextMonthIsLeap;
@@ -42,8 +42,14 @@ public class Reminder implements Comparable<Reminder>,Serializable {
         number = genNumber();
     }
 
+    //先生成一个随机数，随后由调用者设置编号
     protected int genNumber() {
-        return ++seq;
+        Random random = new Random(new Date().getTime());
+        return random.nextInt(1000);
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     private void verifyRepeatAndAdvancedUnitMatch() {
@@ -86,9 +92,11 @@ public class Reminder implements Comparable<Reminder>,Serializable {
                 repeat();
             }else {
                 for(AdvancedNotify aNotify : advancedNotifyList){
-                    if(this.compare(timeNow, getAdvancedTime(aNotify)) >= 0){
-                        ret = genNotifyStr("提前通知");
-                        aNotify.alreadyNotify = true;
+                    if(!aNotify.alreadyNotify) {
+                        if(this.compare(timeNow, getAdvancedTime(aNotify)) >= 0){
+                            ret = genNotifyStr("提前通知");
+                            aNotify.alreadyNotify = true;
+                        }
                     }
                 }
             }
