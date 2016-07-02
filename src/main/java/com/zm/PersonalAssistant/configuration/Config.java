@@ -1,5 +1,7 @@
 package com.zm.PersonalAssistant.configuration;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -61,8 +63,10 @@ public class Config {
 
     //for test
     protected InputStream getInputStream(String filePath) {
-        InputStream ret = getClass().getResourceAsStream(filePath);
-        if(ret == null){
+        InputStream ret = null;
+        try {
+            ret = new FileInputStream(filePath);
+        } catch (FileNotFoundException e) {
             log.error("Can not find file " + filePath);
             throw new IllegalArgumentException("Can not find file " + filePath);
         }

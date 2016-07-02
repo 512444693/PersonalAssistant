@@ -12,11 +12,13 @@ public class MyConfig extends Config {
 
     private int checkInterval;
 
+    private int persistenceInterval;
     public MyConfig(String filePath) throws IOException {
         super(filePath);
 
         this.useDropBox = getBoolean("useDropBox");
         this.checkInterval = getInt("checkInterval");
+        this.persistenceInterval = getInt("persistenceInterval");
         log.info("配置如下 : " + properties.toString());
     }
 
@@ -26,5 +28,9 @@ public class MyConfig extends Config {
 
     public int getCheckInterval() {
         return checkInterval;
+    }
+
+    public int getPersistenceInterval() {
+        return persistenceInterval;
     }
 }

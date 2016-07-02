@@ -134,4 +134,5 @@ public class ConfigTest {
         //Assert
         conf.getString("interval");
     }
+
 }

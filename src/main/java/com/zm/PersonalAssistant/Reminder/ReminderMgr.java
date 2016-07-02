@@ -1,5 +1,6 @@
 package com.zm.PersonalAssistant.Reminder;
 
+import com.zm.PersonalAssistant.DataPersistence.Persistence;
 import com.zm.PersonalAssistant.utils.LunarCalendar;
 import static com.zm.PersonalAssistant.utils.Log.log;
 
@@ -11,15 +12,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by zhangmin on 2016/6/23.
  */
-public class ReminderMgr implements Serializable {
+public class ReminderMgr implements Serializable,Persistence {
+
+    private static final long serialVersionUID = 1L;
+
     private List<Reminder> list = new ArrayList<>();
-    private static final ReminderMgr instance = new ReminderMgr();
+    private transient static final ReminderMgr instance = new ReminderMgr();
 
     private final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
     private int seq = 1000;
+    private boolean changed = true;
 
     private ReminderMgr(){}
 
@@ -41,6 +46,7 @@ public class ReminderMgr implements Serializable {
         list.add(reminder);
         log.info("Add a reminder : " + reminder);
         sort();
+        setChanged();
         writeLock.unlock();
     }
 
@@ -56,9 +62,11 @@ public class ReminderMgr implements Serializable {
             if(!aNotifyStr.equals("")){
                 ret.append(aNotifyStr);
                 ret.append("\r\n");
+                setChanged();
             }
             if(reminder.isDeletable()){
                 reminderIterator.remove();
+                setChanged();
                 log.info("Remove a expired reminder : " + reminder);
             }
         }
@@ -88,6 +96,7 @@ public class ReminderMgr implements Serializable {
             if(reminder.getNumber() == num){
                 found = true;
                 list.remove(reminder);
+                setChanged();
                 log.info("Remove a reminder according to num " + num + " : " + reminder);
                 break;
             }
@@ -132,8 +141,17 @@ public class ReminderMgr implements Serializable {
         return ret;
     }
 
-    //解决单例模式序列化问题，保证反序列化后还是指向一个对象
-    private Object readResolve() {
-        return instance;
+    @Override
+    public boolean changed() {
+        return changed;
+    }
+
+    public void setChanged() {
+        changed = true;
+    }
+
+    @Override
+    public void clearChanged() {
+        changed  = false;
     }
 }

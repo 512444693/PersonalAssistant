@@ -2,6 +2,8 @@ package com.zm.PersonalAssistant;
 
 import com.zm.PersonalAssistant.DataPersistence.DropBox;
 import com.zm.PersonalAssistant.DataPersistence.SyncToCloud;
+import com.zm.PersonalAssistant.server.Server;
+import org.apache.log4j.PropertyConfigurator;
 
 
 /**
@@ -12,12 +14,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        if(args.length != 2){
-            throw new IllegalStateException("<file-ready-to-upload> <except-file>");
-        }
-        DropBox dropBox = new DropBox("DropBox.auth");
-        SyncToCloud syncToCloud = new SyncToCloud(dropBox);
-        syncToCloud.uploadExcept(args[0], args[1]);
-
+        Server.getInstance().start();
     }
 }
