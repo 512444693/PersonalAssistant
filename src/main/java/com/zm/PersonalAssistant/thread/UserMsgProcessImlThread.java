@@ -1,4 +1,4 @@
-package com.zm.PersonalAssistant.task;
+package com.zm.PersonalAssistant.thread;
 
 import com.zm.PersonalAssistant.ThreadMsg.StringMsgBody;
 import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
@@ -9,10 +9,10 @@ import static com.zm.PersonalAssistant.utils.Log.log;
 /**
  * Created by Administrator on 2016/7/3.
  */
-public class UserMsgProcessImlTask extends BlockingTask {
+public class UserMsgProcessImlThread extends BlockingThread {
 
-    public UserMsgProcessImlTask(TaskType taskType) {
-        super(taskType);
+    public UserMsgProcessImlThread(ThreadType threadType) {
+        super(threadType);
     }
 
     @Override

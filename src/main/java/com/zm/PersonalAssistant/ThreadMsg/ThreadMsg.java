@@ -1,32 +1,32 @@
 package com.zm.PersonalAssistant.ThreadMsg;
 
-import com.zm.PersonalAssistant.task.TaskType;
+import com.zm.PersonalAssistant.thread.ThreadType;
 
 /**
  * Created by Administrator on 2016/7/2.
  */
 public class ThreadMsg {
-    public ThreadMsg(TaskType srcTask, TaskType desTask, ThreadMsgType msgType, ThreadMsgBody msgBody) {
-        this.srcTask = srcTask;
-        this.desTask = desTask;
+    public ThreadMsg(ThreadType srcThread, ThreadType desThread, ThreadMsgType msgType, ThreadMsgBody msgBody) {
+        this.srcThread = srcThread;
+        this.desThread = desThread;
         this.msgType = msgType;
         this.msgBody = msgBody;
     }
 
-    public TaskType getSrcTask() {
-        return srcTask;
+    public ThreadType getSrcThread() {
+        return srcThread;
     }
 
-    public void setSrcTask(TaskType srcTask) {
-        this.srcTask = srcTask;
+    public void setSrcThread(ThreadType srcThread) {
+        this.srcThread = srcThread;
     }
 
-    public TaskType getDesTask() {
-        return desTask;
+    public ThreadType getDesThread() {
+        return desThread;
     }
 
-    public void setDesTask(TaskType desTask) {
-        this.desTask = desTask;
+    public void setDesThread(ThreadType desThread) {
+        this.desThread = desThread;
     }
 
     public ThreadMsgType getMsgType() {
@@ -45,8 +45,8 @@ public class ThreadMsg {
         this.msgBody = msgBody;
     }
 
-    private TaskType srcTask;
-    private TaskType desTask;
+    private ThreadType srcThread;
+    private ThreadType desThread;
     private ThreadMsgType msgType;
     private ThreadMsgBody msgBody;
 }

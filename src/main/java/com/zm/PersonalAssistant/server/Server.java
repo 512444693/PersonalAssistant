@@ -8,19 +8,19 @@ import com.zm.PersonalAssistant.Reminder.ReminderMgr;
 import com.zm.PersonalAssistant.Reminder.Repeat;
 import com.zm.PersonalAssistant.UI.Mail;
 import com.zm.PersonalAssistant.configuration.MyConfig;
-import com.zm.PersonalAssistant.task.*;
+import com.zm.PersonalAssistant.thread.*;
 import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
 import com.zm.PersonalAssistant.utils.LunarCalendar;
-import org.apache.log4j.PropertyConfigurator;
 
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.zm.PersonalAssistant.task.TaskType.NONE;
-import static com.zm.PersonalAssistant.task.TaskType.REC_SEND_TASK;
-import static com.zm.PersonalAssistant.task.TaskType.USER_MSG_PROCESS_TASK;
+import static com.zm.PersonalAssistant.thread.ThreadType.*;
 import static com.zm.PersonalAssistant.utils.Log.log;
 
 /**
@@ -38,24 +38,20 @@ public class Server {
 
     private static final Server instance = new Server();
 
-    private ConcurrentHashMap<TaskType, BasicTask> taskMap = new ConcurrentHashMap<>();
-    private Thread persistenceThread;
-    private Thread checkNotifyThread;
-    private Thread recAndSendThread;
-    private Thread userMsgProcessThread;
+    private ConcurrentHashMap<ThreadType, BasicThread> threadMap = new ConcurrentHashMap<>();
 
     private Server() {}
 
-    public void addTask(TaskType taskType, BasicTask task) {
-        taskMap.put(taskType, task);
+    public void addThread(BasicThread thread) {
+        threadMap.put(thread.getThreadType(), thread);
     }
 
     public void sendThreadMsgTo(ThreadMsg msg) {
-        BasicTask task = taskMap.get(msg.getDesTask());
-        if(task != null) {
-            task.putThreadMsg(msg);
+        BasicThread thread = threadMap.get(msg.getDesThread());
+        if(thread != null) {
+            thread.putThreadMsg(msg);
         } else {
-            log.error("发送线程消息失败, 找不到TaskType为" + msg.getDesTask() + "的线程（Task）");
+            log.error("发送线程消息失败, 找不到ThreadType为" + msg.getDesThread() + "的线程");
         }
     }
 
@@ -102,12 +98,11 @@ public class Server {
 
         mail = new Mail(config.getMailUser(), config.getMailPassword(), config.getMailTo());
 
-        //3.创建线程
-        persistenceThread = new Thread(new DataPersistenceImlTask(NONE));
-        checkNotifyThread = new Thread(new CheckNotifyImlTask(NONE));
-        recAndSendThread = new Thread(new RecAndSendTaskImlTask(REC_SEND_TASK,
-                config.getRecAndSendInterval()));
-        userMsgProcessThread = new Thread(new UserMsgProcessImlTask(USER_MSG_PROCESS_TASK));
+        //3.创建线程, 注意，一种类型的线程只能创建一个
+        new DataPersistenceImlThread(PERSISTENCE_THREAD);
+        new CheckNotifyImlThread(CHECK_NOTIFY_THREAD);
+        new RecAndSendImlThread(REC_SEND_THREAD, config.getRecAndSendInterval());
+        new UserMsgProcessImlThread(USER_MSG_PROCESS_THREAD);
 
         //任何步骤失败，程序退出, 若成功则循环等待或者join
     }
@@ -121,10 +116,7 @@ public class Server {
             e.printStackTrace();
             return;
         }
-        persistenceThread.start();
-        checkNotifyThread.start();
-        recAndSendThread.start();
-        userMsgProcessThread.start();
+        startThread();
 
         //test code
         try {
@@ -137,5 +129,14 @@ public class Server {
             e.printStackTrace();
         }
 
+    }
+
+    private void startThread() {
+        Iterator<Map.Entry<ThreadType, BasicThread>> iterator = threadMap.entrySet().iterator();
+        Map.Entry<ThreadType, BasicThread> tmp;
+        while (iterator.hasNext()) {
+            tmp = iterator.next();
+            tmp.getValue().start();
+        }
     }
 }

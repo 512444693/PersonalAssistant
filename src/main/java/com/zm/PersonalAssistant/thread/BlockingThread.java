@@ -1,4 +1,4 @@
-package com.zm.PersonalAssistant.task;
+package com.zm.PersonalAssistant.thread;
 
 import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
 
@@ -9,12 +9,12 @@ import static com.zm.PersonalAssistant.utils.Log.log;
 /**
  * Created by Administrator on 2016/7/2.
  */
-public abstract class BlockingTask extends BasicTask {
+public abstract class BlockingThread extends BasicThread {
 
     private BlockingQueue<ThreadMsg> msgQueue = new LinkedBlockingDeque();
 
-    public BlockingTask(TaskType taskType) {
-        super(taskType);
+    public BlockingThread(ThreadType threadType) {
+        super(threadType);
     }
 
     @Override

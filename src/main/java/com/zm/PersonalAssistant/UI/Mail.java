@@ -258,9 +258,4 @@ public class Mail {
         msg.setFlag(Flags.Flag.SEEN, true);//标记为已读
         msg.setFlag(Flags.Flag.DELETED, true);//删除
     }
-
-    public static void main(String[] args) throws MessagingException {
-        Mail mail = new Mail("information_rec@163.com", "zhangmin", "512444693@qq.com");
-        mail.send(new LunarCalendar().toString());
-    }
 }

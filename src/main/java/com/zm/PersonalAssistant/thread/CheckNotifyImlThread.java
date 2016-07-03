@@ -1,4 +1,4 @@
-package com.zm.PersonalAssistant.task;
+package com.zm.PersonalAssistant.thread;
 
 import com.zm.PersonalAssistant.Reminder.ReminderMgr;
 import com.zm.PersonalAssistant.ThreadMsg.StringMsgBody;
@@ -13,11 +13,11 @@ import static com.zm.PersonalAssistant.utils.Log.log;
 /**
  * Created by Administrator on 2016/7/2.
  */
-public class CheckNotifyImlTask extends BasicTask {
+public class CheckNotifyImlThread extends BasicThread {
     ReminderMgr reminderMgr = Server.getInstance().getReminderMgr();
     MyConfig config = Server.getInstance().getConfig();
-    public CheckNotifyImlTask(TaskType taskType) {
-        super(taskType);
+    public CheckNotifyImlThread(ThreadType threadType) {
+        super(threadType);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class CheckNotifyImlTask extends BasicTask {
             String notify = reminderMgr.getNotify(timeNow);
             if(!notify.equals("")) {
                 ThreadMsgBody msgBody = new StringMsgBody(notify);
-                sendThreadMsgTo(TaskType.REC_SEND_TASK, ThreadMsgType.SEND_TO_ALL, msgBody);
+                sendThreadMsgTo(ThreadType.REC_SEND_THREAD, ThreadMsgType.SEND_TO_ALL, msgBody);
                 //log.debug("通知收发线程发送数据");
             }
             try {

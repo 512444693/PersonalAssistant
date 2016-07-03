@@ -1,4 +1,4 @@
-package com.zm.PersonalAssistant.task;
+package com.zm.PersonalAssistant.thread;
 
 import com.zm.PersonalAssistant.DataPersistence.Persistence;
 import com.zm.PersonalAssistant.DataPersistence.SerializeObject;
@@ -12,14 +12,14 @@ import static com.zm.PersonalAssistant.utils.Log.log;
 /**
  * Created by Administrator on 2016/7/2.
  */
-public class DataPersistenceImlTask extends BasicTask {
+public class DataPersistenceImlThread extends BasicThread {
     private SyncToCloud syncToCloud;
     private MyConfig config;
     //现在是一个对象，以后可以改成列表，持久化多个对象
     private Persistence persistence;
 
-    public DataPersistenceImlTask(TaskType taskType) {
-        super(taskType);
+    public DataPersistenceImlThread(ThreadType threadType) {
+        super(threadType);
     }
 
     @Override
