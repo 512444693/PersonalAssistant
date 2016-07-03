@@ -2,7 +2,6 @@ package com.zm.PersonalAssistant.UI;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
-import com.zm.PersonalAssistant.DataPersistence.SyncToCloud;
 
 import static com.zm.PersonalAssistant.utils.Log.log;
 
@@ -82,7 +81,7 @@ public class Mail {
     }
 
     public void send(String text) {
-        sendTextToFixedClient(genRandomText(20), text + "\r\n====================\r\n" + genRandomText(35));
+        sendTextToFixedClient(genRandomText(20), text + "\r\n\r\n================\r\n" + genRandomText(35));
     }
 
     private static String genRandomText(int num) {
