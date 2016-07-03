@@ -33,17 +33,11 @@ public class RecAndSendImlThread extends NoBlockingThread {
         switch (msg.getMsgType()) {
             case SEND_TO_ALL:
                 String notify = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                //es.submit(new SendTask(notify));
-                String tmp = "====================================\r\n"
-                        + notify + "\r\n====================================";
-                log.debug(tmp);
+                es.submit(new SendTask(notify));
                 break;
             case USER_REPLAY_MSG:
                 String reply = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                //es.submit(new SendTask(reply));
-                tmp = "====================================\r\n"
-                        + reply + "\r\n====================================";
-                log.debug(tmp);
+                es.submit(new SendTask(reply));
                 break;
             default:
                 log.error("收到不支持的线程消息类型 " + msg.getMsgType());
