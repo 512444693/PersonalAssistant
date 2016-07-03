@@ -1,5 +1,7 @@
 package com.zm.PersonalAssistant.Reminder;
 
+import com.zm.PersonalAssistant.DataPersistence.SyncToCloud;
+
 /**
  * Created by zhangmin on 2016/6/21.
  */

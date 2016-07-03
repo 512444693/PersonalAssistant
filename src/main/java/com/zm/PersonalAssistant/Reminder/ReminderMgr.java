@@ -89,7 +89,8 @@ public class ReminderMgr implements Serializable,Persistence {
         return list;
     }
 
-    public void removeAccordingToNumber(int num){
+    public String removeAccordingToNumber(int num){
+        String ret = "";
         writeLock.lock();
         boolean found = false;
         for(Reminder reminder : list){
@@ -98,14 +99,16 @@ public class ReminderMgr implements Serializable,Persistence {
                 list.remove(reminder);
                 setChanged();
                 log.info("Remove a reminder according to num " + num + " : " + reminder);
+                ret = "成功删除提醒事项： " + reminder;
                 break;
             }
         }
         if(!found){
             log.error("Remove reminder fail : Can not find a reminder whose number is " + num);
-            throw new IllegalArgumentException("Remove reminder fail : Can not find a reminder whose number is " + num);
+            throw new IllegalArgumentException("删除提醒事项失败，找不到编号为" + num + "的提醒事项");
         }
         writeLock.unlock();
+        return ret;
     }
 
     public String getReminderStrNextDays(LunarCalendar timeNow, int days){

@@ -15,4 +15,13 @@ public class StringUtils {
         }
         return str;
     }
+
+    public static int getStartInt(String str){
+        Pattern pattern = Pattern.compile("^(\\d+)\\S*");
+        Matcher matcher = pattern.matcher(str);
+        if(matcher.find()){
+            return Integer.parseInt(matcher.group(1));
+        }
+        throw new IllegalArgumentException("Can't find Integer in begin of thre string");
+    }
 }

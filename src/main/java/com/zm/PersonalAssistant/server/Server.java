@@ -118,16 +118,19 @@ public class Server {
         startThread();
 
         //test code
-        try {
+        /*try {
             Thread.sleep(10000);
             LunarCalendar timeToSchool = new LunarCalendar();
             timeToSchool.addMinute(1);
             Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "");
             reminderMgr.add(reminder1);
+            timeToSchool.addMinute(1);
+            reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该睡觉了", "");
+            reminderMgr.add(reminder1);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
