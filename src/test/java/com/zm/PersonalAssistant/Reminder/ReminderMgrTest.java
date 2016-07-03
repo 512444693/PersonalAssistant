@@ -261,10 +261,4 @@ public class ReminderMgrTest {
         assertThat(rm.getReminderStrNextDays(timeNow, 4),not(containsString("该上班了")));
         assertThat(rm.getReminderStrNextDays(timeNow, 0), is(""));
     }
-
-    //TODO: (多少分钟/小时/天/星期/月/年)后  按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
-    //TODO : (几年几月几号几时几分)          按（阳历/农历） 重复（从不/每天/每周/每月/每年） 并且提前(几分钟/小时/天/周/月/从不)  提醒我(做什么)
-    //TODO : 提醒的时间如果比现在的时间小，则不允许添加reminder
-
-    //TODO : 收包与回包，定义接口
 }

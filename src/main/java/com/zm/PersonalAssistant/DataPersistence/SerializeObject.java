@@ -1,16 +1,8 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
-import com.zm.PersonalAssistant.Reminder.Reminder;
-import com.zm.PersonalAssistant.Reminder.ReminderMgr;
-import com.zm.PersonalAssistant.Reminder.Repeat;
 import com.zm.PersonalAssistant.server.Server;
-import com.zm.PersonalAssistant.utils.LunarCalendar;
-
 import static com.zm.PersonalAssistant.utils.Log.log;
-
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by zhangmin on 2016/7/1.

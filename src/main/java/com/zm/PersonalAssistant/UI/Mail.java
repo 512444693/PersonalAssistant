@@ -2,7 +2,6 @@ package com.zm.PersonalAssistant.UI;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
-import com.zm.PersonalAssistant.utils.LunarCalendar;
 
 import static com.zm.PersonalAssistant.utils.Log.log;
 
@@ -17,7 +16,6 @@ import java.util.Properties;
  * Created by zhangmin on 2016/6/28.
  */
 public class Mail {
-
     private static final String MAIL_SERVER_HOST_SMTP = "smtp.163.com";
 
     private static final String MAIL_SERVER_HOST_IMAP = "imap.163.com";

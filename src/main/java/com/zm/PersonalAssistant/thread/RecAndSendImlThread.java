@@ -5,6 +5,9 @@ import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
 import com.zm.PersonalAssistant.UI.Mail;
 import com.zm.PersonalAssistant.server.Server;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import static com.zm.PersonalAssistant.ThreadMsg.ThreadMsgType.USER_REQ_MSG;
 import static com.zm.PersonalAssistant.thread.ThreadType.USER_MSG_PROCESS_THREAD;
 import static com.zm.PersonalAssistant.utils.Log.log;
@@ -15,6 +18,9 @@ import static com.zm.PersonalAssistant.utils.Log.log;
 public class RecAndSendImlThread extends NoBlockingThread {
 
     private Mail mail = Server.getInstance().getMail();
+
+    //创建一个线程池用来发送消息
+    private ExecutorService es = Executors.newFixedThreadPool(1);
 
     public RecAndSendImlThread(ThreadType threadType, int delayTime) {
         super(threadType, delayTime);
@@ -27,15 +33,14 @@ public class RecAndSendImlThread extends NoBlockingThread {
         switch (msg.getMsgType()) {
             case SEND_TO_ALL:
                 String notify = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                //TODO : 设置发送消息超时时间
-                //mail.send(notify);
+                //es.submit(new SendTask(notify));
                 String tmp = "====================================\r\n"
                         + notify + "\r\n====================================";
                 log.debug(tmp);
                 break;
             case USER_REPLAY_MSG:
                 String reply = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                //mail.send(reply);
+                //es.submit(new SendTask(reply));
                 tmp = "====================================\r\n"
                         + reply + "\r\n====================================";
                 log.debug(tmp);
@@ -55,6 +60,21 @@ public class RecAndSendImlThread extends NoBlockingThread {
         String req = mail.rec();
         if(!req.equals("")) {
             sendThreadMsgTo(USER_MSG_PROCESS_THREAD, USER_REQ_MSG, new StringMsgBody(req));
+        }
+    }
+
+    class SendTask implements Runnable {
+
+        private final String notify;
+
+        public SendTask(String notify) {
+            this.notify = notify;
+        }
+
+        @Override
+
+        public void run() {
+            mail.send(notify);
         }
     }
 }

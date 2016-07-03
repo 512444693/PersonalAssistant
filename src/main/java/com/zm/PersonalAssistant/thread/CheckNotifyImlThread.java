@@ -32,6 +32,7 @@ public class CheckNotifyImlThread extends BasicThread {
             //log.debug("Now is " + timeNow + ", check notify ...");
             String notify = reminderMgr.getNotify(timeNow);
             if(!notify.equals("")) {
+                log.debug("检查到通知：\r\n" + notify);
                 ThreadMsgBody msgBody = new StringMsgBody(notify);
                 sendThreadMsgTo(ThreadType.REC_SEND_THREAD, ThreadMsgType.SEND_TO_ALL, msgBody);
                 //log.debug("通知收发线程发送数据");

@@ -120,7 +120,8 @@ public class Server {
         //test code
         try {
             Thread.sleep(10000);
-            LunarCalendar timeToSchool = new LunarCalendar(false, 2016, 7, 2, 11, 55);
+            LunarCalendar timeToSchool = new LunarCalendar();
+            timeToSchool.addMinute(1);
             Reminder reminder1 = new Reminder(false, timeToSchool.clone(), Repeat.DAY, "该上课了", "");
             reminderMgr.add(reminder1);
 
