@@ -15,7 +15,6 @@ import com.zm.PersonalAssistant.utils.LunarCalendar;
 import javax.mail.MessagingException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,11 +46,11 @@ public class Server {
     }
 
     public void sendThreadMsgTo(ThreadMsg msg) {
-        BasicThread thread = threadMap.get(msg.getDesThread());
+        BasicThread thread = threadMap.get(msg.getDesThreadType());
         if(thread != null) {
             thread.putThreadMsg(msg);
         } else {
-            log.error("发送线程消息失败, 找不到ThreadType为" + msg.getDesThread() + "的线程");
+            log.error("发送线程消息失败, 找不到ThreadType为" + msg.getDesThreadType() + "的线程");
         }
     }
 

@@ -6,27 +6,27 @@ import com.zm.PersonalAssistant.thread.ThreadType;
  * Created by Administrator on 2016/7/2.
  */
 public class ThreadMsg {
-    public ThreadMsg(ThreadType srcThread, ThreadType desThread, ThreadMsgType msgType, ThreadMsgBody msgBody) {
-        this.srcThread = srcThread;
-        this.desThread = desThread;
+    public ThreadMsg(ThreadType srcThreadType, ThreadType desThreadType, ThreadMsgType msgType, ThreadMsgBody msgBody) {
+        this.srcThreadType = srcThreadType;
+        this.desThreadType = desThreadType;
         this.msgType = msgType;
         this.msgBody = msgBody;
     }
 
-    public ThreadType getSrcThread() {
-        return srcThread;
+    public ThreadType getSrcThreadType() {
+        return srcThreadType;
     }
 
-    public void setSrcThread(ThreadType srcThread) {
-        this.srcThread = srcThread;
+    public void setSrcThreadType(ThreadType srcThreadType) {
+        this.srcThreadType = srcThreadType;
     }
 
-    public ThreadType getDesThread() {
-        return desThread;
+    public ThreadType getDesThreadType() {
+        return desThreadType;
     }
 
-    public void setDesThread(ThreadType desThread) {
-        this.desThread = desThread;
+    public void setDesThreadType(ThreadType desThreadType) {
+        this.desThreadType = desThreadType;
     }
 
     public ThreadMsgType getMsgType() {
@@ -45,8 +45,8 @@ public class ThreadMsg {
         this.msgBody = msgBody;
     }
 
-    private ThreadType srcThread;
-    private ThreadType desThread;
+    private ThreadType srcThreadType;
+    private ThreadType desThreadType;
     private ThreadMsgType msgType;
     private ThreadMsgBody msgBody;
 }

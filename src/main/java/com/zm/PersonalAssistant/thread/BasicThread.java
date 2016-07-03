@@ -33,7 +33,7 @@ public abstract class BasicThread extends Thread {
     }
 
     protected void replayThreadMsg(ThreadMsg recMsg, ThreadMsgType msgType, ThreadMsgBody msgBody) {
-        ThreadMsg msg = new ThreadMsg(this.threadType, recMsg.getSrcThread(), msgType, msgBody);
+        ThreadMsg msg = new ThreadMsg(this.threadType, recMsg.getSrcThreadType(), msgType, msgBody);
         server.sendThreadMsgTo(msg);
     }
 }
