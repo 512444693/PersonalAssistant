@@ -21,6 +21,10 @@ public class MyConfig extends Config {
     private String mailPassword;
 
     private String mailTo;
+
+    private String mailSmtpHost;
+
+    private String mailImapHost;
     public MyConfig(String filePath) throws IOException {
         super(filePath);
 
@@ -31,6 +35,8 @@ public class MyConfig extends Config {
         this.mailUser = getString("mailUser");
         this.mailPassword = getString("mailPassword");
         this.mailTo = getString("mailTo");
+        this.mailSmtpHost = getString("mailSmtpHost");
+        this.mailImapHost = getString("mailImapHost");
         log.info("配置如下 : " + properties.toString());
     }
 
@@ -60,5 +66,13 @@ public class MyConfig extends Config {
 
     public String getMailTo() {
         return mailTo;
+    }
+
+    public String getMailSmtpHost() {
+        return mailSmtpHost;
+    }
+
+    public String getMailImapHost() {
+        return mailImapHost;
     }
 }

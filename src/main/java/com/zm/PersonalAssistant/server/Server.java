@@ -95,7 +95,8 @@ public class Server {
             syncToCloud = new SyncToCloud(dropBox);
         }
 
-        mail = new Mail(config.getMailUser(), config.getMailPassword(), config.getMailTo());
+        mail = new Mail(config.getMailSmtpHost(), config.getMailImapHost(),
+                config.getMailUser(), config.getMailPassword(), config.getMailTo());
 
         //3.创建线程, 注意，一种类型的线程只能创建一个
         new DataPersistenceImlThread(PERSISTENCE_THREAD);
