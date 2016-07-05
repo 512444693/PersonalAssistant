@@ -1,0 +1,5 @@
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+*/1 * * * * root /root/java/install/monitor.sh /root/java PersonalAssistant-1.0-SNAPSHOT.jar > /dev/null 2>&1
