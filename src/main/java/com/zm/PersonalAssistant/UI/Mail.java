@@ -39,7 +39,7 @@ public class Mail {
 
     private final IMAPStore store;
 
-    public Mail(String mailSmtpHost, String mailImapHost, String user, String password, String mailTo) throws MessagingException {
+    public Mail(String mailSmtpHost, String mailImapHost, final String user, final String password, String mailTo) throws MessagingException {
 
         this.mailSmtpHost = mailSmtpHost;
         this.mailImapHost = mailImapHost;
@@ -49,22 +49,29 @@ public class Mail {
 
         Properties prop = new Properties();
 
-        //prop.setProperty("mail.debug", "true");
+        //prop.put("mail.debug", "true");
 
         //配置smtp
-        prop.setProperty("mail.transport.protocol", "smtp");
-
-        prop.setProperty("mail.smtp.host", mailSmtpHost);
-
-        prop.setProperty("mail.smtp.auth", "true");
+        prop.put("mail.transport.protocol", "smtp");
+        prop.put("mail.smtp.host", mailSmtpHost);
+        prop.put("mail.smtp.socketFactory.port", "465");
+        prop.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.port", "465");
 
         //配置pop3
-        prop.setProperty("mail.store.protocol", "imap");
+        prop.put("mail.store.protocol", "imap");
 
-        prop.setProperty("mail.imap.host", mailImapHost);
+        prop.put("mail.imap.host", mailImapHost);
 
         // 1、创建session
-        session = Session.getInstance(prop);
+        session = Session.getDefaultInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(user, password);
+                    }
+                });
 
         //2、通过session得到transport对象
         try {
