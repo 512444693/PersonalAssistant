@@ -15,4 +15,4 @@ ps -ef | grep ${PRONAME}| grep -v grep
 #需要安装crontab
 #yum install vixie-cron crontabs
 #手动启动crontab服务：service crond start, 查看crontab服务状态：service crond status
-#将crontab设置为开机启动
+#将crontab设置为开机启动chkconfig --level 35 crond on
