@@ -1,6 +1,16 @@
 #!/bin/bash
 
 PRONAME=PersonalAssistant-1.0-SNAPSHOT.jar
+
+num=`ps -ef|grep ${PRONAME}|grep -v grep|wc -l`
+if [ ${num} -ge 1 ]
+then
+    echo ==============================================================================================
+    echo "Warning : Program [${PRONAME}] is running ,please kill the running program first before start!"
+    echo ==============================================================================================
+    exit 0
+fi
+
 nohup java -jar ${PRONAME} &
 
 cd install

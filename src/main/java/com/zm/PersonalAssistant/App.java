@@ -4,7 +4,6 @@ import com.zm.PersonalAssistant.UI.Mail;
 import com.zm.PersonalAssistant.configuration.MyConfig;
 import com.zm.PersonalAssistant.server.Server;
 import com.zm.PersonalAssistant.utils.LunarCalendar;
-import static com.zm.PersonalAssistant.utils.Log.log;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -32,16 +31,6 @@ public class App
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        //TODO : 邮件在linux下的编码问题
-        String text = new LunarCalendar().toString() + "6666666666666这是怎么回事";
-        String text2 = "8888888888这是怎么回事";
-        System.out.println("========1==========");
-        System.out.println(text);
-        System.out.println(text2);
-
-        log.debug(text);
-        log.debug(text2);
-
-        //mail.send(text);*/
+        mail.send(new LunarCalendar().toString());*/
     }
 }
