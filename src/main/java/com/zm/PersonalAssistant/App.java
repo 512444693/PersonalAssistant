@@ -32,5 +32,8 @@ public class App
             e.printStackTrace();
         }
         mail.send(new LunarCalendar().toString());*/
+        //TODO : 长时间接收邮件失败
+        //TODO : crond脚本重启失败
+        //TODO : 程序启动是否备份所有，配置
     }
 }
