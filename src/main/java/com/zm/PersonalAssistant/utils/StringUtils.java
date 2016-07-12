@@ -22,6 +22,6 @@ public class StringUtils {
         if(matcher.find()){
             return Integer.parseInt(matcher.group(1));
         }
-        throw new IllegalArgumentException("Can't find Integer in begin of thre string");
+        throw new IllegalArgumentException("Can't find Integer in begin of the string");
     }
 }
