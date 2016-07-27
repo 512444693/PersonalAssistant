@@ -2,7 +2,7 @@
 
 PRONAME=PersonalAssistant-1.0-SNAPSHOT.jar
 
-num=`ps -ef|grep ${PRONAME}|grep -v grep|wc -l`
+num=`ps -ef|grep ${PRONAME}|grep -v grep|grep -v monitor|wc -l`
 if [ ${num} -ge 1 ]
 then
     echo ==============================================================================================
