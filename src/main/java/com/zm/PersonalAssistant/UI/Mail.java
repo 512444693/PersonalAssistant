@@ -168,7 +168,9 @@ public class Mail {
         try {
             //1、连接服务器
             if(!store.isConnected()) {
+                log.debug("Connecting to mail server ...");
                 store.connect(mailImapHost, user, password);
+                log.debug("Connect OK");
             }
 
             //2、获得邮箱中的INBOX
@@ -202,8 +204,13 @@ public class Mail {
         } finally {
             //4、关闭folder
             try {
-                if (folder != null)
+                if (folder != null) {
                     folder.close(true);
+                }
+                //收取后关闭，根据实际情况改变
+                if (store != null) {
+                    store.close();
+                }
             } catch (MessagingException e) {
                 log.error("folder or store close exception", e);
             }

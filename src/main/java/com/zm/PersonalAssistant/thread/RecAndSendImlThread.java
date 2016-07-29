@@ -53,6 +53,7 @@ public class RecAndSendImlThread extends NoBlockingThread {
 
     @Override
     protected void otherProcess() {
+        log.debug("Receiving mail ...");
         String req = mail.rec();
         if(!req.equals("")) {
             sendThreadMsgTo(USER_MSG_PROCESS_THREAD, USER_REQ_MSG, new StringMsgBody(req));
