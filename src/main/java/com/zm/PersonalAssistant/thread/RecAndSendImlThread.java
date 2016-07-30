@@ -75,3 +75,8 @@ public class RecAndSendImlThread extends NoBlockingThread {
         }
     }
 }
+
+//TODO : 线程模型更改，将线程循环时间改为固定的某个小值
+//TODO : 将某个动作的执行周期改变为现在时间与上次运行时间的差值作比较
+//TODO : mail对象抛出异常后，重新创建一个新mail；将收包周期变大；在收包后关闭连接
+//TODO : 将收发线程分离
