@@ -7,7 +7,6 @@ import com.zm.PersonalAssistant.configuration.MyConfig;
 import com.zm.PersonalAssistant.server.Server;
 
 import javax.mail.MessagingException;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.*;
@@ -121,5 +120,3 @@ public class RecAndSendImlThread extends NoBlockingThread {
         Server.getInstance().setMail(mail);
     }
 }
-
-//TODO : mail对象抛出异常后/固定时间后没有，重新创建一个新mail;
