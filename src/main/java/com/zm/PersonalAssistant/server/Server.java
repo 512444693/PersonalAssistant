@@ -74,6 +74,10 @@ public class Server {
         return mail;
     }
 
+    public void setMail(Mail mail) {
+        this.mail = mail;
+    }
+
     public void init() throws IOException, MessagingException {
 
         //1.读取配置文件
@@ -101,7 +105,7 @@ public class Server {
         //3.创建线程, 注意，一种类型的线程只能创建一个
         new DataPersistenceImlThread(PERSISTENCE_THREAD);
         new CheckNotifyImlThread(CHECK_NOTIFY_THREAD);
-        new RecAndSendImlThread(REC_SEND_THREAD, config.getRecAndSendInterval());
+        new RecAndSendImlThread(REC_SEND_THREAD, 100);
         new UserMsgProcessImlThread(USER_MSG_PROCESS_THREAD);
 
         //任何步骤失败，程序退出, 若成功则循环等待或者join

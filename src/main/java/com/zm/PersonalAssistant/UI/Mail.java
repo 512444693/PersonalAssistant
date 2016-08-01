@@ -160,7 +160,7 @@ public class Mail {
         }
     }
 
-    public String  rec() {
+    public String  rec() throws Exception {
         String ret = "";
 
         IMAPFolder folder = null;
@@ -199,8 +199,10 @@ public class Mail {
 
         } catch (MessagingException e) {
             log.error("收取邮件异常", e);
+            throw e;
         } catch (IOException e) {
             log.error("获取邮件信息失败", e);
+            throw e;
         } finally {
             //4、关闭folder
             try {

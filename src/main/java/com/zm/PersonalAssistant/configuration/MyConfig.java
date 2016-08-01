@@ -14,7 +14,7 @@ public class MyConfig extends Config {
 
     private int persistenceInterval;
 
-    private int recAndSendInterval;
+    private int recInterval;
 
     private String mailUser;
 
@@ -31,7 +31,7 @@ public class MyConfig extends Config {
         this.useDropBox = getBoolean("useDropBox");
         this.checkInterval = getInt("checkInterval");
         this.persistenceInterval = getInt("persistenceInterval");
-        this.recAndSendInterval = getInt("recAndSendInterval");
+        this.recInterval = getInt("recInterval");
         this.mailUser = getString("mailUser");
         this.mailPassword = getString("mailPassword");
         this.mailTo = getString("mailTo");
@@ -52,8 +52,8 @@ public class MyConfig extends Config {
         return persistenceInterval;
     }
 
-    public int getRecAndSendInterval() {
-        return recAndSendInterval;
+    public int getRecInterval() {
+        return recInterval;
     }
 
     public String getMailUser() {

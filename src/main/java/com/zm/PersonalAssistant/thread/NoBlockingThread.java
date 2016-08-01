@@ -11,7 +11,7 @@ import static com.zm.PersonalAssistant.utils.Log.log;
  */
 public abstract class NoBlockingThread extends BasicThread {
     private BlockingQueue<ThreadMsg> msgQueue = new LinkedBlockingDeque();
-    private int delayTime;
+    private int delayTime;//单位ms
 
     public NoBlockingThread(ThreadType threadType, int delayTime) {
         super(threadType);
@@ -33,9 +33,9 @@ public abstract class NoBlockingThread extends BasicThread {
             }
             otherProcess();
             try {
-                Thread.sleep(delayTime * 1000);
+                Thread.sleep(delayTime);
             } catch (InterruptedException e) {
-                log.error("非阻塞线程睡眠被中断", e);
+                log.error("非阻塞线程" + getThreadType() + "睡眠被中断", e);
             }
         }
     }

@@ -3,10 +3,14 @@ package com.zm.PersonalAssistant.thread;
 import com.zm.PersonalAssistant.ThreadMsg.StringMsgBody;
 import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
 import com.zm.PersonalAssistant.UI.Mail;
+import com.zm.PersonalAssistant.configuration.MyConfig;
 import com.zm.PersonalAssistant.server.Server;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javax.mail.MessagingException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.concurrent.*;
 
 import static com.zm.PersonalAssistant.ThreadMsg.ThreadMsgType.USER_REQ_MSG;
 import static com.zm.PersonalAssistant.thread.ThreadType.USER_MSG_PROCESS_THREAD;
@@ -19,8 +23,16 @@ public class RecAndSendImlThread extends NoBlockingThread {
 
     private Mail mail = Server.getInstance().getMail();
 
+    private MyConfig config = Server.getInstance().getConfig();
+
+    private RecTask recTask = new RecTask();
+
+    private long lastRecTime = new Date().getTime();
+
+    private long recInterval = Server.getInstance().getConfig().getRecInterval() * 1000;
+
     //创建一个线程池用来发送消息
-    private ExecutorService es = Executors.newFixedThreadPool(1);
+    private ExecutorService es = Executors.newCachedThreadPool();
 
     public RecAndSendImlThread(ThreadType threadType, int delayTime) {
         super(threadType, delayTime);
@@ -47,16 +59,20 @@ public class RecAndSendImlThread extends NoBlockingThread {
     }
 
     @Override
-    protected void init() {
-
-    }
+    protected void init() {}
 
     @Override
     protected void otherProcess() {
-        log.debug("Receiving mail ...");
-        String req = mail.rec();
-        if(!req.equals("")) {
-            sendThreadMsgTo(USER_MSG_PROCESS_THREAD, USER_REQ_MSG, new StringMsgBody(req));
+        long timeNow = new Date().getTime();
+        if(timeNow - lastRecTime >=  recInterval) {
+            try {
+                //10秒超时
+                es.invokeAny(Arrays.asList(recTask), 10, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                log.error("Receive mail time out");
+                createNewMailAndSet();
+            }
+            lastRecTime = timeNow;
         }
     }
 
@@ -74,9 +90,36 @@ public class RecAndSendImlThread extends NoBlockingThread {
             mail.send(notify);
         }
     }
+
+    class RecTask implements Callable<String> {
+
+        @Override
+        public String call() {
+            log.debug("Receiving mail ...");
+            String req = "";
+            try {
+                req = mail.rec();
+            } catch (Exception e) {
+                log.error("Mail rec error, and create new one");
+                createNewMailAndSet();
+            }
+            if(!req.equals("")) {
+                sendThreadMsgTo(USER_MSG_PROCESS_THREAD, USER_REQ_MSG, new StringMsgBody(req));
+            }
+            return req;
+        }
+    }
+
+    private void createNewMailAndSet() {
+        try {
+            mail = new Mail(config.getMailSmtpHost(), config.getMailImapHost(),
+                    config.getMailUser(), config.getMailPassword(), config.getMailTo());
+        } catch (MessagingException e1) {
+            log.error("Create new mail error, exit program", e1);
+            System.exit(1);
+        }
+        Server.getInstance().setMail(mail);
+    }
 }
 
-//TODO : 线程模型更改，将线程循环时间改为固定的某个小值
-//TODO : 将某个动作的执行周期改变为现在时间与上次运行时间的差值作比较
-//TODO : mail对象抛出异常后，重新创建一个新mail；将收包周期变大；在收包后关闭连接
-//TODO : 将收发线程分离
+//TODO : mail对象抛出异常后/固定时间后没有，重新创建一个新mail;

@@ -22,7 +22,7 @@ public abstract class BlockingThread extends BasicThread {
         try {
             msgQueue.put(msg);
         } catch (InterruptedException e) {
-            log.error("塞消息中断异常", e);
+            log.error("阻塞线程" + getThreadType() + "塞消息中断异常", e);
         }
     }
 
@@ -35,7 +35,7 @@ public abstract class BlockingThread extends BasicThread {
                 ThreadMsg msg= msgQueue.take();
                 process(msg);
             } catch (InterruptedException e) {
-                log.error("取消息中断异常", e);
+                log.error("阻塞线程" + getThreadType() + "取消息中断异常", e);
             }
         }
     }
