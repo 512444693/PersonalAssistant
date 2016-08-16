@@ -11,6 +11,14 @@ public class SerializeObject {
     public static final String DIRECTORY_PATH = Server.DATA_DIRECTORY_PATH;
     public static final String TMP_FILE_SUFFIX = ".TMP";
 
+    //创建目录
+    static {
+        File directory = new File(DIRECTORY_PATH);
+        if(!directory.exists() || !directory.isDirectory()) {
+            directory.mkdir();
+        }
+    }
+
     public static void serialize(Object object) {
         ObjectOutputStream oos = null;
         //先写在临时文件
