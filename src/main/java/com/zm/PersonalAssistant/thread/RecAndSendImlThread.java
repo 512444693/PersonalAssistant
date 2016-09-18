@@ -41,19 +41,26 @@ public class RecAndSendImlThread extends NoBlockingThread {
     @Override
     protected void process(ThreadMsg msg) {
         log.debug("RecAndSendThread process a msg " + msg.getMsgType());
-        switch (msg.getMsgType()) {
-            case SEND_TO_ALL:
-                String notify = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                es.submit(new SendTask(notify));
-                log.debug("向客户端发送如下内容：\r\n" + notify);
-                break;
-            case USER_REPLAY_MSG:
-                String reply = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
-                es.submit(new SendTask(reply));
-                log.debug("向客户端发送如下内容：\r\n" + reply);
-                break;
-            default:
-                log.error("收到不支持的线程消息类型 " + msg.getMsgType());
+        try {
+            switch (msg.getMsgType()) {
+                case SEND_TO_ALL:
+                    String notify = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
+                    //es.submit(new SendTask(notify));
+                    es.invokeAny(Arrays.asList(new SendTask(notify)), 20, TimeUnit.SECONDS);
+                    log.debug("向客户端发送如下内容：\r\n" + notify);
+                    break;
+                case USER_REPLAY_MSG:
+                    String reply = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
+                    //es.submit(new SendTask(reply));
+                    es.invokeAny(Arrays.asList(new SendTask(reply)), 20, TimeUnit.SECONDS);
+                    log.debug("向客户端发送如下内容：\r\n" + reply);
+                    break;
+                default:
+                    log.error("收到不支持的线程消息类型 " + msg.getMsgType());
+            }
+        } catch (Exception e) {
+            log.error("Send mail time out");
+            createNewMailAndSet();
         }
     }
 
@@ -75,7 +82,7 @@ public class RecAndSendImlThread extends NoBlockingThread {
         }
     }
 
-    class SendTask implements Runnable {
+    class SendTask implements Callable<Integer> {
 
         private final String notify;
 
@@ -84,9 +91,9 @@ public class RecAndSendImlThread extends NoBlockingThread {
         }
 
         @Override
-
-        public void run() {
+        public Integer call() throws Exception {
             mail.send(notify);
+            return 0;
         }
     }
 
@@ -112,7 +119,7 @@ public class RecAndSendImlThread extends NoBlockingThread {
     private void createNewMailAndSet() {
         try {
             mail = new Mail(config.getMailSmtpHost(), config.getMailImapHost(),
-                    config.getMailUser(), config.getMailPassword(), config.getMailTo());
+                    config.getMailUser(), config.getMailPassword(), config.getMailTo(), config.isUseSmtpSSL());
         } catch (MessagingException e1) {
             log.error("Create new mail error, exit program", e1);
             System.exit(1);

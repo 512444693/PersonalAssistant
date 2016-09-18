@@ -2,6 +2,7 @@ package com.zm.PersonalAssistant.UI;
 
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
+import com.zm.PersonalAssistant.server.Server;
 
 import static com.zm.PersonalAssistant.utils.Log.log;
 
@@ -39,7 +40,7 @@ public class Mail {
 
     private final IMAPStore store;
 
-    public Mail(String mailSmtpHost, String mailImapHost, final String user, final String password, String mailTo) throws MessagingException {
+    public Mail(String mailSmtpHost, String mailImapHost, final String user, final String password, String mailTo, boolean isUseSmtpSSL) throws MessagingException {
 
         this.mailSmtpHost = mailSmtpHost;
         this.mailImapHost = mailImapHost;
@@ -54,13 +55,16 @@ public class Mail {
         //配置smtp
         prop.put("mail.transport.protocol", "smtp");
         prop.put("mail.smtp.host", mailSmtpHost);
-        prop.put("mail.smtp.socketFactory.port", "465");
-        prop.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
         prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.port", "465");
+        if(isUseSmtpSSL) {
+            log.debug("SMTP use ssl !!");
+            prop.put("mail.smtp.socketFactory.port", "465");
+            prop.put("mail.smtp.socketFactory.class",
+                    "javax.net.ssl.SSLSocketFactory");
+            prop.put("mail.smtp.port", "465");
+        }
 
-        //配置pop3
+        //配置imap
         prop.put("mail.store.protocol", "imap");
 
         prop.put("mail.imap.host", mailImapHost);

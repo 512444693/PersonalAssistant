@@ -25,6 +25,8 @@ public class MyConfig extends Config {
     private String mailSmtpHost;
 
     private String mailImapHost;
+
+    private boolean useSmtpSSL;
     public MyConfig(String filePath) throws IOException {
         super(filePath);
 
@@ -37,6 +39,7 @@ public class MyConfig extends Config {
         this.mailTo = getString("mailTo");
         this.mailSmtpHost = getString("mailSmtpHost");
         this.mailImapHost = getString("mailImapHost");
+        this.useSmtpSSL = getBoolean("useSmtpSSL");
         log.info("配置如下 : " + properties.toString());
     }
 
@@ -74,5 +77,9 @@ public class MyConfig extends Config {
 
     public String getMailImapHost() {
         return mailImapHost;
+    }
+
+    public boolean isUseSmtpSSL() {
+        return useSmtpSSL;
     }
 }

@@ -97,7 +97,7 @@ public class Server {
         }
 
         mail = new Mail(config.getMailSmtpHost(), config.getMailImapHost(),
-                config.getMailUser(), config.getMailPassword(), config.getMailTo());
+                config.getMailUser(), config.getMailPassword(), config.getMailTo(), config.isUseSmtpSSL());
 
         //3.创建线程, 注意，一种类型的线程只能创建一个
         new DataPersistenceImlThread(PERSISTENCE_THREAD);
