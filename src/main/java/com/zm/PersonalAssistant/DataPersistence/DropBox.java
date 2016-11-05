@@ -5,8 +5,9 @@ import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.DbxPathV2;
 import com.dropbox.core.v2.files.*;
-import com.zm.PersonalAssistant.utils.StringUtils;
-import static com.zm.PersonalAssistant.utils.Log.log;
+
+import com.zm.frame.utils.StringUtils;
+import static com.zm.frame.log.Log.log;
 
 import java.io.File;
 import java.io.FileInputStream;

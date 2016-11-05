@@ -1,4 +1,4 @@
-package com.zm.PersonalAssistant.utils;
+package com.zm.PersonalAssistant.Reminder;
 
 import java.io.Serializable;
 import java.util.Calendar;

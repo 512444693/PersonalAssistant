@@ -1,6 +1,6 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
-import static com.zm.PersonalAssistant.utils.Log.log;
+import static com.zm.frame.log.Log.log;
 
 import java.io.File;
 import java.io.IOException;

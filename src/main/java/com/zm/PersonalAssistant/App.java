@@ -1,6 +1,6 @@
 package com.zm.PersonalAssistant;
 
-import com.zm.PersonalAssistant.server.Server;
+import com.zm.PersonalAssistant.server.PAServer;
 
 
 /**
@@ -10,6 +10,6 @@ import com.zm.PersonalAssistant.server.Server;
 public class App 
 {
     public static void main( String[] args ) {
-        Server.getInstance().start();
+        PAServer.getInstance().start();
     }
 }

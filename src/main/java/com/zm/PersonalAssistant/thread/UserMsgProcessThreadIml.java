@@ -4,35 +4,37 @@ import com.zm.PersonalAssistant.Reminder.AdvancedUnit;
 import com.zm.PersonalAssistant.Reminder.Reminder;
 import com.zm.PersonalAssistant.Reminder.ReminderMgr;
 import com.zm.PersonalAssistant.Reminder.Repeat;
-import com.zm.PersonalAssistant.ThreadMsg.StringMsgBody;
-import com.zm.PersonalAssistant.ThreadMsg.ThreadMsg;
-import com.zm.PersonalAssistant.ThreadMsg.ThreadMsgType;
-import com.zm.PersonalAssistant.server.Server;
-import com.zm.PersonalAssistant.utils.LunarCalendar;
-import com.zm.PersonalAssistant.utils.StringUtils;
+import com.zm.PersonalAssistant.Reminder.LunarCalendar;
+import com.zm.PersonalAssistant.configuration.MyDef;
+import com.zm.PersonalAssistant.server.PAServer;
+import com.zm.frame.thread.msg.StringMsgBody;
+import com.zm.frame.thread.msg.ThreadMsg;
+import com.zm.frame.thread.thread.BlockingThread;
+import com.zm.frame.utils.StringUtils;
 
-import static com.zm.PersonalAssistant.utils.Log.log;
+import static com.zm.frame.log.Log.log;
 
 /**
  * Created by Administrator on 2016/7/3.
  */
-public class UserMsgProcessImlThread extends BlockingThread {
+public class UserMsgProcessThreadIml extends BlockingThread {
 
-    public UserMsgProcessImlThread(ThreadType threadType) {
-        super(threadType);
+
+    public UserMsgProcessThreadIml(int threadType, int threadId) {
+        super(threadType, threadId);
     }
 
     @Override
-    protected void process(ThreadMsg msg) {
-        log.debug("UserMsgProcessThread process a msg " + msg.getMsgType());
-        switch (msg.getMsgType()) {
-            case USER_REQ_MSG:
-                String req = ((StringMsgBody)msg.getMsgBody()).getMsgBody();
+    protected void processMsg(ThreadMsg msg) {
+        String req = ((StringMsgBody) msg.msgBody).getMsgBody();
+        log.debug("请求处理线程收到消息：" + msg.toString() + ", body :" + req);
+        switch (msg.msgType) {
+            case MyDef.MSG_TYPE_REQ:
                 String replay = processUserReq(req);
-                replayThreadMsg(msg, ThreadMsgType.USER_REPLAY_MSG, new StringMsgBody(replay));
+                replayThreadMsg(msg, MyDef.MSG_TYPE_REPLY, new StringMsgBody(replay));
                 break;
             default:
-                log.error("收到不支持的线程消息类型 " + msg.getMsgType());
+                log.error("请求处理线程收到不支持的消息类型 " + msg.msgType);
         }
     }
 
@@ -44,7 +46,7 @@ public class UserMsgProcessImlThread extends BlockingThread {
             log.debug("收到命令为" + command + "的用户请求");
         } catch (Exception e) {
             log.error("命令错误: " + commandStr, e);
-            return "命令错误 " + commandStr;
+            return "命令错误：" + commandStr;
         }
         return  UserReqType.getUserReqTypeByOrdinal(command).process();
     }
@@ -70,11 +72,9 @@ public class UserMsgProcessImlThread extends BlockingThread {
     }
 
     @Override
-    protected void init() {
+    protected void init() {}
 
-    }
-
-    private static ReminderMgr reminderMgr = Server.getInstance().getReminderMgr();
+    private static ReminderMgr reminderMgr = PAServer.getInstance().getReminderMgr();
     private static String[] args;
     private static int argIndex = -1;
     private static int command = 0;

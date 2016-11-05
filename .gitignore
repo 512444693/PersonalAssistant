@@ -1,15 +1,8 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+logs
 
 # Maven #
 target
-logs
 
 # IntelliJ #
 .idea
-
-data
+*.iml

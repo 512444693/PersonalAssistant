@@ -1,14 +1,15 @@
 package com.zm.PersonalAssistant.DataPersistence;
 
-import com.zm.PersonalAssistant.server.Server;
-import static com.zm.PersonalAssistant.utils.Log.log;
+import com.zm.PersonalAssistant.configuration.MyDef;
+
+import static com.zm.frame.log.Log.log;
 import java.io.*;
 
 /**
  * Created by zhangmin on 2016/7/1.
  */
 public class SerializeObject {
-    public static final String DIRECTORY_PATH = Server.DATA_DIRECTORY_PATH;
+    public static final String DIRECTORY_PATH = MyDef.DATA_DIRECTORY_PATH;
     public static final String TMP_FILE_SUFFIX = ".TMP";
 
     //创建目录
