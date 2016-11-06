@@ -99,7 +99,6 @@ public class WXTask extends Task {
             try {
                 String sMsg = wxcpt.DecryptMsg(sMsgSig, sTimeStamp, sNonce, sReqData);
                 //log.debug("after decrypt msg: " + sMsg);
-                // TODO: 解析出明文xml标签的内容进行处理
                 requestInfo = RequestInfo.getFromXml(sMsg);
                 log.debug("收到信息 : " + requestInfo.getContent());
                 sendThreadMsgTo(MyDef.MSG_TYPE_REQ, new StringMsgBody(requestInfo.getContent()),

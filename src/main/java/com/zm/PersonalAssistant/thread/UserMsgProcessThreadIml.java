@@ -31,6 +31,7 @@ public class UserMsgProcessThreadIml extends BlockingThread {
         switch (msg.msgType) {
             case MyDef.MSG_TYPE_REQ:
                 String replay = processUserReq(req);
+                log.debug("请求处理线程返回消息：" + replay);
                 replayThreadMsg(msg, MyDef.MSG_TYPE_REPLY, new StringMsgBody(replay));
                 break;
             default:
@@ -62,7 +63,7 @@ public class UserMsgProcessThreadIml extends BlockingThread {
     }
 
     private static String getNextArg() {
-        while(argIndex < args.length) {
+        while(argIndex < args.length - 1) {
             argIndex++;
             if(!args[argIndex].equals("")) {
                 return args[argIndex];
