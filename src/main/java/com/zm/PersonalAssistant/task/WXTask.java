@@ -108,6 +108,7 @@ public class WXTask extends Task {
                             MyDef.THREAD_TYPE_PROCESS);
                 } else {
                     log.error("Wrong user : " + requestInfo.getFromUserName());
+                    remove();
                 }
             } catch (Exception e) {
                 log.error("解密失败，失败原因请查看异常");
