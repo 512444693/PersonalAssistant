@@ -20,9 +20,11 @@ public class MyConfig extends Config {
     //微信
     private String corpid;
     private String corpsecret;
-    //区别于access token
+    //区别于access_token
     private String token;
     private String encodingAESKey;
+    // 微信用户
+    private String user;
 
     //监听http端口
     private String port;
@@ -38,6 +40,7 @@ public class MyConfig extends Config {
         this.corpsecret = getString("corpsecret");
         this.token = getString("token");
         this.encodingAESKey = getString("encodingAESKey");
+        this.user = getString("user");
         this.port = getString("port");
         log.info("配置如下 : " + properties.toString());
     }
@@ -72,5 +75,9 @@ public class MyConfig extends Config {
 
     public String getPort() {
         return port;
+    }
+
+    public String getUser() {
+        return user;
     }
 }

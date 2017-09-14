@@ -11,6 +11,7 @@ import static com.zm.frame.log.Log.log;
  */
 public class WXSend {
     private static MyConfig config = PAServer.getInstance().getConfig();
+    private static final String user = config.getUser();
     private static final String CORPID = config.getCorpid();
     private static final String CORPSECRET = config.getCorpsecret();
     private static final String GET_TOKEN_URL = String.format(
@@ -20,7 +21,7 @@ public class WXSend {
     private static final String SEND_INFO_URL_FORMAT =
             "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s";
 
-    private static final String SEND_INFO_JSON_FORMAT = "{\"touser\": \"Z-_-_-M\"," +
+    private static final String SEND_INFO_JSON_FORMAT = "{\"touser\": \"" + user + "\"," +
             "\"msgtype\": \"text\",\"agentid\": 0,\"text\": {\"content\": \"%s\"},\"safe\":0}";
 
     public static void send(String info) {

@@ -3,6 +3,7 @@ package com.zm.PersonalAssistant.task;
 import com.qq.weixin.mp.aes.WXBizMsgCrypt;
 import com.sun.net.httpserver.HttpExchange;
 import com.zm.PersonalAssistant.configuration.MyDef;
+import com.zm.PersonalAssistant.server.PAServer;
 import com.zm.PersonalAssistant.thread.msg.WXMsgBody;
 import com.zm.frame.thread.msg.StringMsgBody;
 import com.zm.frame.thread.msg.ThreadMsg;
@@ -35,6 +36,7 @@ public class WXTask extends Task {
     private String sNonce = "";
     private String sVerifyEchoStr = "";
     private RequestInfo requestInfo;
+    private String user = PAServer.getInstance().getConfig().getUser();
 
     private final static String RESPONSEXML =
             "<xml>" +
@@ -100,9 +102,13 @@ public class WXTask extends Task {
                 String sMsg = wxcpt.DecryptMsg(sMsgSig, sTimeStamp, sNonce, sReqData);
                 //log.debug("after decrypt msg: " + sMsg);
                 requestInfo = RequestInfo.getFromXml(sMsg);
-                log.debug("收到信息 : " + requestInfo.getContent());
-                sendThreadMsgTo(MyDef.MSG_TYPE_REQ, new StringMsgBody(requestInfo.getContent()),
-                        MyDef.THREAD_TYPE_PROCESS);
+                log.debug("收到 " + requestInfo.getFromUserName() + " 发来的信息 : " + requestInfo.getContent());
+                if (requestInfo.getFromUserName().equals(user)) {
+                    sendThreadMsgTo(MyDef.MSG_TYPE_REQ, new StringMsgBody(requestInfo.getContent()),
+                            MyDef.THREAD_TYPE_PROCESS);
+                } else {
+                    log.error("Wrong user : " + requestInfo.getFromUserName());
+                }
             } catch (Exception e) {
                 log.error("解密失败，失败原因请查看异常");
                 log.error(e);
