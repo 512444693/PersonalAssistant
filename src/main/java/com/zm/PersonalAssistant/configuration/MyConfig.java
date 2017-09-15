@@ -25,6 +25,7 @@ public class MyConfig extends Config {
     private String encodingAESKey;
     // 微信用户
     private String user;
+    private int agentid;
 
     //监听http端口
     private String port;
@@ -42,6 +43,7 @@ public class MyConfig extends Config {
         this.encodingAESKey = getString("encodingAESKey");
         this.user = getString("user");
         this.port = getString("port");
+        this.agentid = getInt("agentid");
         log.info("配置如下 : " + properties.toString());
     }
 
@@ -79,5 +81,9 @@ public class MyConfig extends Config {
 
     public String getUser() {
         return user;
+    }
+
+    public int getAgentid() {
+        return agentid;
     }
 }
